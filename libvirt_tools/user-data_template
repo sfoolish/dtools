@@ -1,4 +1,4 @@
-# cloud-config
+#cloud-config
 # https://cloudinit.readthedocs.org/en/latest/topics/examples.html#yaml-examples
 ssh_authorized_keys:
   - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCvFEdEGiYWU1Hzs2I3YJ5FOHvSXtpjPqww+lEui5fQqZTIr8h8nHtLQk0n09SV2+HdjwZsebSLI1WY0Vkdop4CbWSjflbqG4zvdM5kiZpbH6JIQnFwKo6mFmDx77ZNtyMR2TK4AZnokpePSiGK77pSHetOrfMOXXjdlnerlhzLJ25E4iMKCF4ShCWDw0bVUIzY/0PR6WZ1mcC/7cbdJopyZEw5zZqWLD9m1dfzPXHFv4KrcB8V5bkKF4NLOuyzW8HV8EGyU6HbkvZ3V26fcfb+fMtXrGE6iSvKcqK9JeCyKT1WXnJuu4GPXv6WX8BKQBMvOMWijdmQhhP9kbFKK+E5 root@d57d4211a191
