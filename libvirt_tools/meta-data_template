@@ -1,0 +1,11 @@
+instance-id: iid-abcdeff
+network-interfaces: |
+  # The primary network interface
+  auto eth0
+  iface eth0 inet static
+  address REPLACE_IPADDR
+  netmask 255.255.255.0
+  gateway REPLACE_GATEWAY
+  dns-nameservers 8.8.8.8
+local-hostname: REPLACE_HOSTNAME
+
