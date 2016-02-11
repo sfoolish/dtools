@@ -76,7 +76,14 @@ function launch_host_vms() {
             -e "s/REPLACE_HOSTNAME/${host}/g" \
             meta-data_template \
             > meta-data
-        cp user-data_template user-data
+
+        if [ -f ~/.ssh/id_rsa.pub ]; then
+            sed -e "/ssh_authorized_keys/a\  - $(cat ~/.ssh/id_rsa.pub)" user-data_template \
+                > user-data
+        else
+            cp user-data_template user-data
+        fi
+
         genisoimage  -output seed.iso -volid cidata -joliet -rock user-data meta-data
         cp seed.iso $vm_dir
 

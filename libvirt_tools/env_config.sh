@@ -9,8 +9,8 @@
 
 # this is a modified copy of bottlenecks/utils/rubbos_dev_env_setup/env_config.sh
 
-export HOSTNAMES=${HOSTNAMES:-"ubuntu"}
-export VIRT_NUMBER=${VIRT_NUMBER:-"1"}
+export HOSTNAMES=${HOSTNAMES:-"ubuntu1,ubuntu2"}
+export VIRT_NUMBER=${VIRT_NUMBER:-"2"}
 export VIRT_MEM=${VIRT_MEM:-"4096"}
 export VIRT_CPUS=${VIRT_CPUS:-"4"}
 export IMAGE_URL=${IMAGE_URL:-"https://cloud-images.ubuntu.com/trusty/current/trusty-server-cloudimg-amd64-disk1.img"}
