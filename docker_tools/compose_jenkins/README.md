@@ -10,6 +10,7 @@ $ chmod +x /usr/local/bin/docker-compose
 ```
 
 Refer https://docs.docker.com/compose/install/ for more docker-compose install methods.
+
 Refer https://docs.docker.com/compose/gettingstarted/ for basic compose usage.
 
 ### start jenkins dockers
@@ -20,7 +21,9 @@ $ docker-compose up
 
 ```
 
-### web login jenkins master configure slave node
+### jenkins slave node configuration
+
+Use jenkins web ui to configure jenkins slave nodes
 
 http://master:8880/computer/new create new node
 set executors number, remote workspace, Launch methods to Launch slave agent via Java Web Start
