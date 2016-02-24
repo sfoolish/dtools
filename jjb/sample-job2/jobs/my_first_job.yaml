@@ -1,0 +1,30 @@
+# https://mescanef.net/blog/2015/01/jenkins-job-builder-why-worth-using/
+# pip install jenkins-job-builder
+# jenkins-jobs --conf jenkins_job.ini -l DEBUG update jobs/ my_first_job 
+
+- job:
+    # Specify your job name.
+    name: my_first_job
+    builders:
+      - shell:
+          !include-raw: './scripts/my_first_job.sh'
+    description: 'This is my first Jenkins Job defined in YAML file format.'
+    # Node's label
+    # node: my_first_job_label
+    # Define Vars used by the shell script; assign them default values.
+    parameters:
+        - string:
+            name: MESSAGE
+            default: 'Free Hello for all.'
+        - string:
+            name: MAX_COUNT
+            default: '3'
+    # Automatically start (trigger) the job's build at 12:00 and 15:00 on every day.
+    triggers:
+        - timed: 'H 12,15 * * *'
+    wrappers:
+      - timeout:
+          fail: true
+          # Timeout job after 120 seconds of its execution. If timeout happens = fail the build.
+          timeout: 1
+          abort: true

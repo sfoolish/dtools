@@ -1,0 +1,13 @@
+# https://www.cloudbees.com/blog/using-jenkins-docker
+# docker run -p 8080:8080  michaelneale/jenkins-docker
+
+# http://www.jeeatwork.com/?p=182
+# jenkins-jobs test ./sample1.yaml
+# jenkins-jobs update ./sample1.yaml
+# 
+- job:
+    name: Very basic freestyle job
+    project-type: freestyle
+    description: 'Just contais a very basic jenkins job that echos "Hello world"'
+    builders:
+      - shell: ifconfig
