@@ -1,0 +1,10 @@
+master:
+  image: michaelneale/jenkins-docker
+  ports:
+   - "8080:8080"
+
+slave1:
+  build: .
+  links:
+   - master
+
