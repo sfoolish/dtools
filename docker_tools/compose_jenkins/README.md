@@ -32,4 +32,5 @@ set executors number, remote workspace, Launch methods to Launch slave agent via
 
 * https://wiki.jenkins-ci.org/display/JENKINS/Distributed+builds
 * https://iww.inria.fr/tech-zone/using-docker-to-run-jenkins-jobs/
+* https://wiki.jenkins-ci.org/display/JENKINS/Step+by+step+guide+to+set+up+master+and+slave+machines
 
