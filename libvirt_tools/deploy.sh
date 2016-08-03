@@ -12,16 +12,6 @@
 
 set -x
 
-SCRIPT_DIR=`cd ${BASH_SOURCE[0]%/*};pwd`
-WORK_DIR=${SCRIPT_DIR}/work
-
-mkdir -p $WORK_DIR
-
-source ./env_config.sh
-
-host_vm_dir=$WORK_DIR/vm
-
-
 function download_iso()
 {
     mkdir -p ${WORK_DIR}/cache
@@ -105,9 +95,49 @@ function launch_host_vms() {
     rm -rf meta-data user-data seed.iso
 }
 
+function wait_ok() {
+    MGMT_IP=$1
+    set +x
+    echo "wait_ok enter"
+    ssh-keygen -f "/root/.ssh/known_hosts" -R $MGMT_IP >/dev/null 2>&1
+    retry=0
+    until timeout 1s ssh $ssh_args ubuntu@$MGMT_IP "exit" >/dev/null 2>&1
+    do
+        echo "os install time used: $((retry*100/$2))%"
+        sleep 1
+        let retry+=1
+        if [[ $retry -ge $2 ]];then
+            timeout 1s ssh $ssh_args ubuntu@$MGMT_IP "exit"
+            echo "os install time out"
+            exit 1
+        fi
+    done
+    echo "wait_ok exit"
+}
+
+function root_auth_setup()
+{
+    MGMT_IP=$1
+    ssh $ssh_args ubuntu@$MGMT_IP "
+        sudo sed -ie 's/ssh-rsa/\n&/g' /root/.ssh/authorized_keys
+        sudo sed -ie '/echo/d' /root/.ssh/authorized_keys
+    "
+}
+
+source ./env_config.sh
+
+SCRIPT_DIR=`cd ${BASH_SOURCE[0]%/*};pwd`
+WORK_DIR=${SCRIPT_DIR}/work
+ssh_args="-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i /root/.ssh/id_rsa"
+
+mkdir -p $WORK_DIR
+host_vm_dir=$WORK_DIR/vm
+
 
 download_iso
 launch_host_vms
+wait_ok "192.168.122.11" 25
+root_auth_setup "192.168.122.11"
 
 set +x
 
