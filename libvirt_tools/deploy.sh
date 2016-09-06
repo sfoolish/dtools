@@ -53,7 +53,7 @@ function launch_host_vms() {
     i=0
     for host in $HOSTNAMES; do
         echo "creating vm disk for instance $host" \
-             "ip ${IPADDR_PREFIX}$((i+11))" \
+             "ip ${IPADDR_PREFIX}$((i+51))" \
              "mac ${mac_array[$i]}"
         vm_dir=$host_vm_dir/$host
         mkdir -p $vm_dir
@@ -61,7 +61,7 @@ function launch_host_vms() {
         cp ${WORK_DIR}/cache/$IMAGE_NAME $vm_dir
 
         # create seed.iso
-        sed -e "s/REPLACE_IPADDR/${IPADDR_PREFIX}$((i+11))/g" \
+        sed -e "s/REPLACE_IPADDR/${IPADDR_PREFIX}$((i+51))/g" \
             -e "s/REPLACE_GATEWAY/${IPADDR_PREFIX}1/g" \
             -e "s/REPLACE_HOSTNAME/${host}/g" \
             meta-data_template \
@@ -101,15 +101,16 @@ function wait_ok() {
     echo "wait_ok enter"
     ssh-keygen -f "/root/.ssh/known_hosts" -R $MGMT_IP >/dev/null 2>&1
     retry=0
-    until timeout 1s ssh $ssh_args ubuntu@$MGMT_IP "exit" >/dev/null 2>&1
+    until timeout 1s ssh $ssh_args centos@$MGMT_IP "exit" >/dev/null 2>&1
     do
+        ssh $ssh_args centos@$MGMT_IP "exit" >/dev/null 2>&1
         echo "os install time used: $((retry*100/$2))%"
         sleep 1
         let retry+=1
         if [[ $retry -ge $2 ]];then
-            timeout 1s ssh $ssh_args ubuntu@$MGMT_IP "exit"
+            timeout 1s ssh $ssh_args centos@$MGMT_IP "exit"
             echo "os install time out"
-            exit 1
+            return
         fi
     done
     echo "wait_ok exit"
@@ -118,7 +119,7 @@ function wait_ok() {
 function root_auth_setup()
 {
     MGMT_IP=$1
-    ssh $ssh_args ubuntu@$MGMT_IP "
+    ssh -tt $ssh_args centos@$MGMT_IP "
         sudo sed -ie 's/ssh-rsa/\n&/g' /root/.ssh/authorized_keys
         sudo sed -ie '/echo/d' /root/.ssh/authorized_keys
     "
@@ -136,8 +137,8 @@ host_vm_dir=$WORK_DIR/vm
 
 download_iso
 launch_host_vms
-wait_ok "192.168.122.11" 25
-root_auth_setup "192.168.122.11"
+wait_ok "192.168.122.51" 25
+root_auth_setup "192.168.122.51"
 
 set +x
 
