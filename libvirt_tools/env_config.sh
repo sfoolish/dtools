@@ -13,6 +13,8 @@ export HOSTNAMES=${HOSTNAMES:-"centos"}
 export VIRT_NUMBER=${VIRT_NUMBER:-"1"}
 export VIRT_MEM=${VIRT_MEM:-"4096"}
 export VIRT_CPUS=${VIRT_CPUS:-"4"}
+# centos atomic
+#export IMAGE_URL=http://cloud.centos.org/centos/7/atomic/images/CentOS-Atomic-Host-7-GenericCloud.qcow2
 export IMAGE_URL=${IMAGE_URL:-"http://cloud.centos.org/centos/7/images/CentOS-7-x86_64-GenericCloud.qcow2"}
 export IMAGE_NAME=${IMAGE_NAME:-"disk.img"}
 export IPADDR_PREFIX=${IPADDR_PREFIX:-"192.168.122."}
