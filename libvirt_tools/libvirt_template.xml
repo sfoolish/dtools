@@ -35,7 +35,7 @@
     <graphics type='vnc' port='-1' autoport='yes' listen='0.0.0.0'/>
     <console type='pty'/>
     <video>
-      <model type='cirrus'/>
+      <model type='vga' vram='8192' heads='1'/>
     </video>
   </devices>
 </domain>
