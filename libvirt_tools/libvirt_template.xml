@@ -33,7 +33,16 @@
     </interface>
     <input type='tablet' bus='usb'/>
     <graphics type='vnc' port='-1' autoport='yes' listen='0.0.0.0'/>
-    <console type='pty'/>
+    <serial type='file'>
+      <source path='REPLACE_VM_LOGGING'/>
+      <target port='0'/>
+      <alias name='serial0'/>
+    </serial>
+    <console type='file'>
+      <source path='REPLACE_VM_LOGGING'/>
+      <target type='serial' port='0'/>
+      <alias name='serial0'/>
+    </console>
     <video>
       <model type='vga' vram='8192' heads='1'/>
     </video>

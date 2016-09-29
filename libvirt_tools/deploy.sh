@@ -84,6 +84,7 @@ function launch_host_vms() {
             -e "s#REPLACE_IMAGE#$vm_dir/disk.img#g" \
             -e "s#REPLACE_SEED_IMAGE#$vm_dir/seed.iso#g" \
             -e "s/REPLACE_MAC_ADDR/${mac_array[$i]}/g" \
+            -e "s#REPLACE_VM_LOGGING#$vm_dir/console.log#g" \
             libvirt_template.xml \
             > $vm_dir/libvirt.xml
 
