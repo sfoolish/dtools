@@ -19,6 +19,30 @@ function download_iso()
 }
 
 
+function setup_nat_net() {
+    net_name=$1
+    gw=$2
+    mask=$3
+    ip_start=$4
+    ip_end=$5
+
+    sudo virsh net-destroy $net_name
+    sudo virsh net-undefine $net_name
+    # create install network
+    sed -e "s/REPLACE_BRIDGE/br_$net_name/g" \
+        -e "s/REPLACE_NAME/$net_name/g" \
+        -e "s/REPLACE_GATEWAY/$gw/g" \
+        -e "s/REPLACE_MASK/$mask/g" \
+        -e "s/REPLACE_START/$ip_start/g" \
+        -e "s/REPLACE_END/$ip_end/g" \
+        nat_template.xml \
+        > $net_name.xml
+
+    sudo virsh net-define $net_name.xml
+    sudo virsh net-start $net_name
+}
+
+
 function tear_down_machines() {
     for i in $HOSTNAMES; do
         echo "tear down machine:" $i
@@ -85,6 +109,7 @@ function launch_host_vms() {
             -e "s#REPLACE_SEED_IMAGE#$vm_dir/seed.iso#g" \
             -e "s/REPLACE_MAC_ADDR/${mac_array[$i]}/g" \
             -e "s#REPLACE_VM_LOGGING#$vm_dir/console.log#g" \
+            -e "s/REPLACE_NET_MGMT_NET/mgmt-net/g" \
             libvirt_template.xml \
             > $vm_dir/libvirt.xml
 
@@ -136,6 +161,7 @@ host_vm_dir=$WORK_DIR/vm
 
 
 download_iso
+setup_nat_net mgmt-net $MGMT_NET_GW $MGMT_NET_MASK $MGMT_NET_IP_START $MGMT_NET_IP_END
 launch_host_vms
 wait_ok "192.168.122.11" 25
 root_auth_setup "192.168.122.11"

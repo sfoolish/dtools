@@ -31,6 +31,10 @@
       <mac address='REPLACE_MAC_ADDR'/>
       <model type='virtio'/>
     </interface>
+    <interface type='network'>
+      <source network='REPLACE_NET_MGMT_NET'/>
+      <model type='virtio'/>
+    </interface>
     <input type='tablet' bus='usb'/>
     <graphics type='vnc' port='-1' autoport='yes' listen='0.0.0.0'/>
     <serial type='file'>

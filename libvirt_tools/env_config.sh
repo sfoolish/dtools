@@ -17,3 +17,7 @@ export IMAGE_URL=${IMAGE_URL:-"https://cloud-images.ubuntu.com/trusty/current/tr
 export IMAGE_NAME=${IMAGE_NAME:-"disk.img"}
 export IPADDR_PREFIX=${IPADDR_PREFIX:-"192.168.122."}
 
+export MGMT_NET_GW="192.168.222.1"
+export MGMT_NET_MASK="255.255.255.0"
+export MGMT_NET_IP_START="192.168.222.2"
+export MGMT_NET_IP_END="192.168.222.254"
