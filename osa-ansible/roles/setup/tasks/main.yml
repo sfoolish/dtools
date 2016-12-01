@@ -1,0 +1,245 @@
+---
+# USE SHELL
+#- name: Update package source lists(TODO use ansible module)
+#  shell: apt-get update
+#
+#- name: Upgrade the system packages and kernel
+#  shell: apt-get dist-upgrade -y
+
+# USE APT MODULE
+# http://docs.ansible.com/ansible/apt_module.html
+- name: Update all packages to the latest version
+  apt:
+    upgrade: dist
+    update_cache: yes
+  tags:
+    - upgrade
+
+# https://support.ansible.com/hc/en-us/articles/201958037-Reboot-a-server-and-wait-for-it-to-come-back
+- name: restart machine
+  shell: sleep 2 && shutdown -r now "Ansible updates triggered"
+  async: 1
+  poll: 0
+  sudo: true
+  ignore_errors: true
+  tags:
+    - upgrade
+    - reboot
+
+# TODO need test
+#- name: waiting for server to come back
+#  local_action:
+#    wait_for
+#    host={{ inventory_hostname }}
+#    state=started
+#    delay=1
+#    timeout=300
+#  sudo: false
+#  tags:
+#    - reboot
+
+#- name: Wait for server to restart
+#  local_action:
+#    wait_for
+#    host={{ inventory_hostname }}
+#    port=22
+#    delay=1
+#    timeout=300
+#  sudo: false
+#  tags:
+#    - reboot
+
+- name: waiting for server to come back
+  local_action:
+    wait_for
+    host={{ inventory_hostname }}
+    state=started
+    delay=1
+    timeout=10
+  sudo: false
+  ignore_errors: true
+  tags:
+    - upgrade
+    - reboot
+
+## TODO need test password not set
+- name: set root passwd
+  user: name=root password='root'
+  tags:
+    - basic-packages
+
+- name: set test passwd
+  user: name=test password='root'
+  tags:
+    - basic-packages
+
+- name: install basic packages
+  action: "{{ ansible_pkg_mgr }} name={{ item }} state=present"
+  with_items:
+    - aptitude
+    - build-essential
+    - git
+    - ntp
+    - ntpdate
+    - openssh-server
+    - python-dev
+    - sudo
+  tags:
+    - basic-packages
+  when: inventory_hostname in groups['osa']
+
+- name: install basic packages
+  action: "{{ ansible_pkg_mgr }} name={{ item }} state=present"
+  with_items:
+    - bridge-utils
+    - debootstrap
+    - ifenslave
+    - ifenslave-2.6
+    - lsof
+    - lvm2
+    - ntp
+    - ntpdate
+    - openssh-server
+    - sudo
+    - tcpdump
+    - vlan
+  tags:
+    - basic-packages
+  #when: inventory_hostname not in groups['osa']
+
+- name: configure kernel modules
+  lineinfile:
+    dest: "/etc/modules"
+    line: "{{ item }}"
+    backup: "true"
+  with_items:
+    - bonding
+    - 8021q
+  tags:
+    - basic-configure
+  when: inventory_hostname not in groups['osa']
+
+- name: clone openstack ansible code
+  shell: |
+    if [ ! -d /opt/openstack-ansible ]; then
+        git clone https://git.openstack.org/openstack/openstack-ansible /opt/openstack-ansible
+    fi
+  tags:
+    - bootstrap
+  when: inventory_hostname in groups['osa']
+
+- name: run bootstrap script
+  shell: |
+    if [ ! -d /openstack ]; then
+        cd /opt/openstack-ansible
+        scripts/bootstrap-ansible.sh
+    fi
+  tags:
+    - bootstrap
+  when: inventory_hostname in groups['osa']
+
+- name: Get public key contents and store as var
+  slurp:
+    src: "/root/.ssh/id_rsa.pub"
+  register: repo_pub
+  changed_when: false
+  tags:
+    - repo-key
+    - repo-key-create
+    - bootstrap
+  delegate_to: "{{ groups['osa'][0] }}"
+  when: inventory_hostname not in groups['osa']
+
+- name: Register a fact for the repo user pub key
+  set_fact:
+     repo_pubkey: "{{ repo_pub.content | b64decode}}"
+  tags:
+    - repo-key
+    - repo-key-create
+    - bootstrap
+  when: inventory_hostname not in groups['osa']
+
+- debug:
+    msg: "{{ repo_pubkey }}"
+  tags:
+    - bootstrap
+  when: inventory_hostname not in groups['osa']
+
+- name: add pubkey to authorized_keys
+  lineinfile:
+    dest: "/root/.ssh/authorized_keys"
+    line: "{{ repo_pubkey }}"
+    backup: "true"
+  tags:
+    - basic-configure
+    - bootstrap
+  when: inventory_hostname not in groups['osa']
+
+- name: create storage file
+  shell: dd if=/dev/zero of=/var/storage.img bs=1M count=2048
+  tags:
+    - storage-setup
+  when: inventory_hostname in groups['storage']
+
+- name: losetup device
+  shell: |
+    loop_dev=`losetup -a |grep "/var/storage.img"|awk -F':' '{print $1}'`
+    if [ -z $loop_dev ]; then
+      losetup -f --show /var/storage.img
+    else
+      echo $loop_dev
+    fi
+  tags:
+    - storage-setup
+  when: inventory_hostname in groups['storage']
+
+- name: create physical volume (TODO update hardcoded loop0)
+  shell: pvcreate --metadatasize 2048 /dev/loop0
+  tags:
+    - storage-setup
+  when: inventory_hostname in groups['storage']
+
+- name: create virtual volume
+  shell: vgcreate cinder-volumes /dev/loop0
+  tags:
+    - storage-setup
+  when: inventory_hostname in groups['storage']
+
+- name: configure osa interfaces
+  template:
+    src: "interfaces_osa"
+    dest: "/etc/network/interfaces"
+  when: inventory_hostname in groups['osa']
+  tags:
+    - interfaces-config
+
+- name: configure infra interfaces
+  template:
+    src: "interfaces_infra"
+    dest: "/etc/network/interfaces"
+  when: inventory_hostname in groups['infra']
+  tags:
+    - interfaces-config
+
+- name: configure compute interfaces
+  template:
+    src: "interfaces_compute"
+    dest: "/etc/network/interfaces"
+  when: inventory_hostname in groups['compute']
+  tags:
+    - interfaces-config
+
+- name: configure storage interfaces
+  template:
+    src: "interfaces_storage"
+    dest: "/etc/network/interfaces"
+  when: inventory_hostname in groups['storage']
+  tags:
+    - interfaces-config
+
+- name: interfaces restart
+  shell: |
+    ifdown --exclude=lo -a && ifup --exclude=lo -a
+  tags:
+    - interfaces-config
+

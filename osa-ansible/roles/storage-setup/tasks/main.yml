@@ -1,0 +1,31 @@
+---
+- name: create storage file
+  shell: dd if=/dev/zero of=/var/storage.img bs=1M count=2048
+  tags:
+    - storage-setup
+
+- name: losetup device
+  shell: |
+    loop_dev=`losetup -a |grep "/var/storage.img"|awk -F':' '{print $1}'`
+    if [ -z $loop_dev ]; then
+      losetup -f --show /var/storage.img
+    else
+      echo $loop_dev
+    fi
+  tags:
+    - storage-setup
+
+- name: create physical volume (TODO update hardcoded loop0)
+  shell: pvcreate --metadatasize 2048 /dev/loop0
+  tags:
+    - storage-setup
+
+- name: create virtual volume
+  shell: vgcreate cinder-volumes /dev/loop0
+  tags:
+    - storage-setup
+
+- debug:
+    msg: "{{ repo_pubkey }}"
+  tags:
+    - bootstrap

@@ -1,0 +1,41 @@
+---
+- name: clone openstack ansible code
+  shell: |
+    if [ ! -d /opt/openstack-ansible ]; then
+        git clone https://git.openstack.org/openstack/openstack-ansible /opt/openstack-ansible
+    fi
+  tags:
+    - bootstrap
+
+- name: run bootstrap script
+  shell: |
+    if [ ! -d /openstack ]; then
+        cd /opt/openstack-ansible
+        scripts/bootstrap-ansible.sh
+    fi
+  tags:
+    - bootstrap
+
+- name: Get public key contents and store as var
+  slurp:
+    src: "/root/.ssh/id_rsa.pub"
+  register: repo_pub
+  changed_when: false
+  tags:
+    - repo-key
+    - repo-key-create
+    - bootstrap
+
+- name: Register a fact for the repo user pub key
+  set_fact:
+     repo_pubkey: "{{ repo_pub.content | b64decode}}"
+  tags:
+    - repo-key
+    - repo-key-create
+    - bootstrap
+
+- debug:
+    msg: "{{ repo_pubkey }}"
+  tags:
+    - bootstrap
+
