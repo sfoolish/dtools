@@ -12,13 +12,6 @@
 
 set -x
 
-function download_iso()
-{
-    mkdir -p ${WORK_DIR}/cache
-    curl --connect-timeout 10 -o ${WORK_DIR}/cache/$IMAGE_NAME $IMAGE_URL
-}
-
-
 function setup_nat_net() {
     net_name=$1
     gw=$2
@@ -160,7 +153,6 @@ mkdir -p $WORK_DIR
 host_vm_dir=$WORK_DIR/vm
 
 
-download_iso
 setup_nat_net mgmt-net $MGMT_NET_GW $MGMT_NET_MASK $MGMT_NET_IP_START $MGMT_NET_IP_END
 launch_host_vms
 wait_ok "192.168.122.21" 25
