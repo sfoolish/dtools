@@ -39,3 +39,30 @@
   tags:
     - bootstrap
 
+- name: Initial environment configuration
+  shell: |
+    if [ ! -d /etc/openstack_deploy ]; then
+        cp -a /opt/openstack-ansible/etc/openstack_deploy /etc/openstack_deploy
+        cd /etc/openstack_deploy
+        cp openstack_user_config.yml.example openstack_user_config.yml
+    fi
+  tags:
+    - bootstrap
+    - osa_configure
+
+- name: configuring environment layout
+  template:
+    src: "openstack_user_config.yml"
+    dest: "/etc/openstack_deploy/openstack_user_config.yml"
+  tags:
+    - bootstrap
+    - osa_configure
+
+- name: Configuring service credentials
+  shell: |
+    cd /opt/openstack-ansible/scripts
+    python pw-token-gen.py --file /etc/openstack_deploy/user_secrets.yml
+  tags:
+    - bootstrap
+    - osa_configure
+
