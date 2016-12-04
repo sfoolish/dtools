@@ -4,13 +4,13 @@
   roles:
     - setup
 
-- hosts: osa
-  remote_user: root
-  roles:
-    - osa-setup
-
 - hosts: storage
   remote_user: root
   roles:
     - storage-setup
+
+- hosts: osa
+  remote_user: root
+  roles:
+    - osa-setup
 
