@@ -43,7 +43,6 @@ neutron router-gateway-set router provider
 
 nova boot --flavor m1.tiny --image cirros-0.3.3 --nic net-id=$(neutron net-list | grep selfservice | awk '{print $2}') --security-group default demo1
 
-neutron floatingip-create provider
 demo1_floating_ip=$(neutron floatingip-create provider | grep floating_ip_address | awk '{print $4}')
 nova floating-ip-associate demo1 $demo1_floating_ip
 
