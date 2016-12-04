@@ -66,3 +66,25 @@
     - bootstrap
     - osa_configure
 
+
+# Run playbooks
+- name: Run setup hosts
+  shell: |
+    cd /opt/openstack-ansible/playbooks
+    openstack-ansible setup-hosts.yml
+  tags:
+    - osa_run
+
+- name: Run setup infrastructure
+  shell: |
+    cd /opt/openstack-ansible/playbooks
+    openstack-ansible setup-infrastructure.yml
+  tags:
+    - osa_run
+
+- name: Run setup openstack
+  shell: |
+    cd /opt/openstack-ansible/playbooks
+    openstack-ansible setup-openstack.yml
+  tags:
+    - osa_run
