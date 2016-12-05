@@ -9,8 +9,8 @@
 
 # this is a modified copy of bottlenecks/utils/rubbos_dev_env_setup/env_config.sh
 
-export HOSTNAMES=${HOSTNAMES:-"osa,infra1,compute1,storage1"}
-export VIRT_NUMBER=${VIRT_NUMBER:-"4"}
+export HOSTNAMES=${HOSTNAMES:-"osa,infra1,infra2,infra3,compute1,compute2,storage1,log1"}
+export VIRT_NUMBER=${VIRT_NUMBER:-"8"}
 #export VIRT_NUMBER=${VIRT_NUMBER:-"1"}
 export VIRT_MEM=${VIRT_MEM:-"10240"}
 export VIRT_CPUS=${VIRT_CPUS:-"8"}
