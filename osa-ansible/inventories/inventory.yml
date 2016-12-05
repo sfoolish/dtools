@@ -1,13 +1,18 @@
 [osa]
-osa ansible_ssh_host=192.168.122.21
+osa ansible_ssh_host=192.168.122.30
 
 [infra]
-infra ansible_ssh_host=192.168.122.22
+infra1 ansible_ssh_host=192.168.122.31
+infra2 ansible_ssh_host=192.168.122.32
+infra3 ansible_ssh_host=192.168.122.33
 
-[compute]
-compute ansible_ssh_host=192.168.122.23
+[log]
+log1 ansible_ssh_host=192.168.122.34
 
 [storage]
-storage ansible_ssh_host=192.168.122.24
+storage1 ansible_ssh_host=192.168.122.35
 
+[compute]
+compute1 ansible_ssh_host=192.168.122.36
+compute2 ansible_ssh_host=192.168.122.37
 

@@ -1,11 +1,4 @@
 ---
-# USE SHELL
-#- name: Update package source lists(TODO use ansible module)
-#  shell: apt-get update
-#
-#- name: Upgrade the system packages and kernel
-#  shell: apt-get dist-upgrade -y
-
 # USE APT MODULE
 # http://docs.ansible.com/ansible/apt_module.html
 - name: Update all packages to the latest version
@@ -25,29 +18,6 @@
   tags:
     - upgrade
     - reboot
-
-# TODO need test
-#- name: waiting for server to come back
-#  local_action:
-#    wait_for
-#    host={{ inventory_hostname }}
-#    state=started
-#    delay=1
-#    timeout=300
-#  sudo: false
-#  tags:
-#    - reboot
-
-#- name: Wait for server to restart
-#  local_action:
-#    wait_for
-#    host={{ inventory_hostname }}
-#    port=22
-#    delay=1
-#    timeout=300
-#  sudo: false
-#  tags:
-#    - reboot
 
 - name: waiting for server to come back
   local_action:
@@ -107,17 +77,18 @@
     - basic-packages
   #when: inventory_hostname not in groups['osa']
 
-- name: configure kernel modules
-  lineinfile:
-    dest: "/etc/modules"
-    line: "{{ item }}"
-    backup: "true"
-  with_items:
-    - bonding
-    - 8021q
-  tags:
-    - basic-configure
-  when: inventory_hostname not in groups['osa']
+# OPEN this task may cause network unreachable
+#- name: configure kernel modules
+#  lineinfile:
+#    dest: "/etc/modules"
+#    line: "{{ item }}"
+#    backup: "true"
+#  with_items:
+#    - bonding
+#    - 8021q
+#  tags:
+#    - basic-packages
+#  when: inventory_hostname not in groups['osa']
 
 - name: clone openstack ansible code
   shell: |
@@ -125,7 +96,7 @@
         git clone https://git.openstack.org/openstack/openstack-ansible /opt/openstack-ansible
     fi
   tags:
-    - bootstrap
+    - osa-bootstrap
   when: inventory_hostname in groups['osa']
 
 - name: run bootstrap script
@@ -135,7 +106,7 @@
         scripts/bootstrap-ansible.sh
     fi
   tags:
-    - bootstrap
+    - osa-bootstrap
   when: inventory_hostname in groups['osa']
 
 - name: Get public key contents and store as var
@@ -156,13 +127,13 @@
   tags:
     - repo-key
     - repo-key-create
-    - bootstrap
+    - osa-bootstrap
   when: inventory_hostname not in groups['osa']
 
 - debug:
     msg: "{{ repo_pubkey }}"
   tags:
-    - bootstrap
+    - osa-bootstrap
   when: inventory_hostname not in groups['osa']
 
 - name: add pubkey to authorized_keys
@@ -171,8 +142,7 @@
     line: "{{ repo_pubkey }}"
     backup: "true"
   tags:
-    - basic-configure
-    - bootstrap
+    - osa-bootstrap
   when: inventory_hostname not in groups['osa']
 
 - name: create storage file
@@ -205,19 +175,27 @@
     - storage-setup
   when: inventory_hostname in groups['storage']
 
-- name: configure osa interfaces
-  template:
-    src: "interfaces_osa"
-    dest: "/etc/network/interfaces"
-  when: inventory_hostname in groups['osa']
-  tags:
-    - interfaces-config
+#- name: configure osa interfaces
+#  template:
+#    src: "interfaces_osa"
+#    dest: "/etc/network/interfaces"
+#  when: inventory_hostname in groups['osa']
+#  tags:
+#    - interfaces-config
 
 - name: configure infra interfaces
   template:
     src: "interfaces_infra"
     dest: "/etc/network/interfaces"
   when: inventory_hostname in groups['infra']
+  tags:
+    - interfaces-config
+
+- name: configure log interfaces
+  template:
+    src: "interfaces_log"
+    dest: "/etc/network/interfaces"
+  when: inventory_hostname in groups['log']
   tags:
     - interfaces-config
 
@@ -239,7 +217,7 @@
 
 - name: interfaces restart
   shell: |
-    ifdown --exclude=lo -a && ifup --exclude=lo -a
+    ifconfig eth0 0 && ifdown --exclude=lo -a && ifup --exclude=lo -a
   tags:
     - interfaces-config
 
