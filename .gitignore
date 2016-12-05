@@ -1,3 +1,4 @@
 libvirt_tools/work
 mgmt-net.xml
 *.img
+*.retry
