@@ -25,7 +25,39 @@
   tags:
     - storage-setup
 
-- debug:
-    msg: "{{ repo_pubkey }}"
+- name: install nfs packages
+  action: "{{ ansible_pkg_mgr }} name={{ item }} state=present"
+  with_items:
+    - nfs-kernel-server
+    - portmap
+    - nfs-common
   tags:
-    - bootstrap
+    - storage-setup
+    - storage-nfs
+
+- name: Create nfs data directory
+  file: path="{{ item }}" state="directory"
+  with_items:
+    - "/vol/cinder"
+    - "/images"
+  tags:
+    - storage-setup
+    - storage-nfs
+
+# TODO use template to render dir
+- name: configure nfs exports
+  template:
+    src: "exports.j2"
+    dest: "/etc/exports"
+  tags:
+    - storage-setup
+    - storage-nfs
+
+# TODO use notify
+- name: restart nfs server
+  service: name={{ item }}  state=restarted enabled=yes
+  with_items:
+    - nfs-kernel-server
+  tags:
+    - storage-setup
+    - storage-nfs
