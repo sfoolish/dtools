@@ -70,7 +70,7 @@ function launch_host_vms() {
     i=0
     for host in $HOSTNAMES; do
         echo "creating vm disk for instance $host" \
-             "ip ${IPADDR_PREFIX}$((i+31))" \
+             "ip ${IPADDR_PREFIX}$((i+30))" \
              "mac ${mac_array[$i]}"
         vm_dir=$host_vm_dir/$host
         mkdir -p $vm_dir
@@ -78,7 +78,7 @@ function launch_host_vms() {
         cp ${WORK_DIR}/cache/$IMAGE_NAME $vm_dir
 
         # create seed.iso
-        sed -e "s/REPLACE_IPADDR/${IPADDR_PREFIX}$((i+31))/g" \
+        sed -e "s/REPLACE_IPADDR/${IPADDR_PREFIX}$((i+30))/g" \
             -e "s/REPLACE_GATEWAY/${IPADDR_PREFIX}1/g" \
             -e "s/REPLACE_HOSTNAME/${host}/g" \
             meta-data_template \
@@ -155,6 +155,8 @@ host_vm_dir=$WORK_DIR/vm
 
 setup_nat_net mgmt-net $MGMT_NET_GW $MGMT_NET_MASK $MGMT_NET_IP_START $MGMT_NET_IP_END
 launch_host_vms
+wait_ok "192.168.122.30" 25
+root_auth_setup "192.168.122.30"
 wait_ok "192.168.122.31" 25
 root_auth_setup "192.168.122.31"
 wait_ok "192.168.122.32" 25
@@ -169,8 +171,6 @@ wait_ok "192.168.122.36" 25
 root_auth_setup "192.168.122.36"
 wait_ok "192.168.122.37" 25
 root_auth_setup "192.168.122.37"
-wait_ok "192.168.122.38" 25
-root_auth_setup "192.168.122.38"
 
 set +x
 
