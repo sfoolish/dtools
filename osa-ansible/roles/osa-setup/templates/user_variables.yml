@@ -1,0 +1,10 @@
+---
+# This file contains an example of the global variable overrides
+# which may need to be set for a production environment.
+
+## Load Balancer Configuration (haproxy/keepalived)
+haproxy_keepalived_external_vip_cidr: "192.168.122.222/32"
+haproxy_keepalived_internal_vip_cidr: "172.29.236.222/22"
+haproxy_keepalived_external_interface: br-vlan
+haproxy_keepalived_internal_interface: br-mgmt
+

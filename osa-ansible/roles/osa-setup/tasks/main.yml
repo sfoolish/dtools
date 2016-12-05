@@ -58,6 +58,22 @@
     - bootstrap
     - osa_configure
 
+- name: configuring environment cinder
+  template:
+    src: "cinder.yml"
+    dest: "/etc/openstack_deploy/env.d/cinder.yml"
+  tags:
+    - bootstrap
+    - osa_configure
+
+- name: configuring user variables
+  template:
+    src: "user_variables.yml"
+    dest: "/etc/openstack_deploy/user_variables.yml"
+  tags:
+    - bootstrap
+    - osa_configure
+
 - name: Configuring service credentials
   shell: |
     cd /opt/openstack-ansible/scripts
