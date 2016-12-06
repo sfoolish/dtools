@@ -175,13 +175,13 @@
     - storage-setup
   when: inventory_hostname in groups['storage']
 
-#- name: configure osa interfaces
-#  template:
-#    src: "interfaces_osa"
-#    dest: "/etc/network/interfaces"
-#  when: inventory_hostname in groups['osa']
-#  tags:
-#    - interfaces-config
+- name: configure osa interfaces
+  template:
+    src: "interfaces_osa"
+    dest: "/etc/network/interfaces"
+  when: inventory_hostname in groups['osa']
+  tags:
+    - interfaces-config
 
 - name: configure infra interfaces
   template:
