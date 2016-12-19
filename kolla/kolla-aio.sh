@@ -54,4 +54,4 @@ date
 kolla-ansible pull
 date
 kolla-ansible deploy
-
+date
