@@ -9,9 +9,9 @@
 
 # this is a modified copy of bottlenecks/utils/rubbos_dev_env_setup/env_config.sh
 
-export HOSTNAMES=${HOSTNAMES:-"centos"}
-export VIRT_NUMBER=${VIRT_NUMBER:-"1"}
-export VIRT_MEM=${VIRT_MEM:-"4096"}
+export HOSTNAMES=${HOSTNAMES:-"centos-ansible,control01,control02,control03,network01,compute01,monitoring01,storage01"}
+export VIRT_NUMBER=${VIRT_NUMBER:-"8"}
+export VIRT_MEM=${VIRT_MEM:-"8096"}
 export VIRT_CPUS=${VIRT_CPUS:-"4"}
 # centos atomic
 #export IMAGE_URL=http://cloud.centos.org/centos/7/atomic/images/CentOS-Atomic-Host-7-GenericCloud.qcow2
@@ -19,7 +19,7 @@ export IMAGE_URL=${IMAGE_URL:-"http://cloud.centos.org/centos/7/images/CentOS-7-
 export IMAGE_NAME=${IMAGE_NAME:-"disk.img"}
 export IPADDR_PREFIX=${IPADDR_PREFIX:-"192.168.122."}
 
-export MGMT_NET_GW="192.168.222.1"
+export MGMT_NET_GW="10.0.2.1"
 export MGMT_NET_MASK="255.255.255.0"
-export MGMT_NET_IP_START="192.168.222.2"
-export MGMT_NET_IP_END="192.168.222.254"
+export MGMT_NET_IP_START="10.0.2.2"
+export MGMT_NET_IP_END="10.0.2.254"
