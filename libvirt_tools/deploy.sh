@@ -164,7 +164,7 @@ download_iso
 setup_nat_net mgmt-net $MGMT_NET_GW $MGMT_NET_MASK $MGMT_NET_IP_START $MGMT_NET_IP_END
 launch_host_vms
 for i in 1 2 3 4 5 6 7 8; do
-    wait_ok "192.168.122.7${i}" 25
+    wait_ok "192.168.122.7${i}" 60
     root_auth_setup "192.168.122.7${i}"
 done
 

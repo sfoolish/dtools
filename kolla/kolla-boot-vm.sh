@@ -2,8 +2,7 @@
 
 source /etc/kolla/admin-openrc.sh
 
-ifconfig eth1 up
-ifconfig br-ex 10.0.2.1/24
+ifconfig eth1 10.0.2.2/24
 
 openstack server create \
     --image cirros \
