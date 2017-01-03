@@ -1,8 +1,8 @@
 instance-id: iid-abcdeff
 network-interfaces: |
   # The primary network interface
-  auto eth0
-  iface eth0 inet static
+  auto ens3
+  iface ens3 inet static
   address REPLACE_IPADDR
   netmask 255.255.255.0
   gateway REPLACE_GATEWAY
