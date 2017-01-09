@@ -22,16 +22,10 @@ mkdir -p $WORKSPACE
 cd $WORKSPACE
 
 git clone https://github.com/openstack/kolla-kubernetes.git .
+git checkout d4e2c0adb3f44af0dbdc5521f7878e2eba4fa7bf
+git apply ~/kk8s.diff
 
 mkdir -p $WORKSPACE/logs/
 
-sed  -ie "s/180/360/g" tools/wait_for_pods.sh
-
-cat << EOF > tests/bin/fix_gate_iptables.sh
-#!/bin/bash -xe
-
-echo "cleaned by sf"
-
-EOF
 tools/setup_gate.sh deploy centos binary ceph centos-7 shell
 

@@ -1,0 +1,102 @@
+diff --git a/helm/all_values.yaml b/helm/all_values.yaml
+index a4e47dd..fb15e32 100755
+--- a/helm/all_values.yaml
++++ b/helm/all_values.yaml
+@@ -3,7 +3,7 @@ common:
+             kolla:
+                 all:
+                     replicas: 1
+-                    docker_registry: docker.io
++                    docker_registry: 192.168.122.81:4000
+                     docker_namespace: kolla
+                     base_distro: centos
+                     install_type: binary
+@@ -17,7 +17,7 @@ common:
+         selector_value: "true"
+
+         #FIXME remove once everything's over to globals.
+-        docker_registry: docker.io
++        docker_registry: 192.168.122.81:4000
+         docker_namespace: kolla
+         kolla_base_distro: centos
+         kolla_install_type: binary
+diff --git a/tests/bin/fix_gate_iptables.sh b/tests/bin/fix_gate_iptables.sh
+index 598b650..05d8180 100755
+--- a/tests/bin/fix_gate_iptables.sh
++++ b/tests/bin/fix_gate_iptables.sh
+@@ -1,10 +1,4 @@
+ #!/bin/bash -xe
+
+-l=$(sudo iptables -L INPUT --line-numbers | grep openstack-INPUT | \
+-    awk '{print $1}')
+-sudo iptables -D INPUT $l
++echo "cleaned by sf"
+
+-ip a | sed '/^[^1-9]/d;' | awk '{print $2}' | sed 's/://' | \
+-    grep -v '^lo$' | while read line; do
+-    sudo iptables -I INPUT 1 -i $line -j openstack-INPUT
+-done
+diff --git a/tests/bin/setup_canal.sh b/tests/bin/setup_canal.sh
+index 6b12dc5..c01c266 100755
+--- a/tests/bin/setup_canal.sh
++++ b/tests/bin/setup_canal.sh
+@@ -9,6 +9,8 @@ curl "$url" -o /tmp/canal.yaml
+
+ sed -i "s@192.168.0.0/16@172.16.130.0/22@" /tmp/canal.yaml
+ sed -i "s@10.96.232.136@172.16.128.100@" /tmp/canal.yaml
++sed -i -e "s@quay.io@192.168.122.81:4000/quay.io@g" /tmp/canal.yaml
++sed -i -e "s@gcr.io@192.168.122.81:4000/gcr.io@g" /tmp/canal.yaml
+
+ kubectl create -f /tmp/canal.yaml
+
+diff --git a/tools/setup_gate.sh b/tools/setup_gate.sh
+index bfba8b8..e8ff7c2 100755
+--- a/tools/setup_gate.sh
++++ b/tools/setup_gate.sh
+@@ -54,6 +54,7 @@ EOF
+     --branch master --cache-dir /opt/git git://git.openstack.org \
+     openstack/kolla-ansible && true
+ [ ! -d kolla-ansible ] && git clone https://github.com/openstack/kolla-ansible.git
++cd kolla-ansible; git checkout 9d3a60ecf993586f6f8a1e7c796ec8526e6b2227;cd - /
+
+ ###NOTE: (sbezverk) Temp workaround to the issue with the gate
+ pushd kolla-ansible;
+diff --git a/tools/setup_kubernetes.sh b/tools/setup_kubernetes.sh
+index db325a5..a6c4a65 100755
+--- a/tools/setup_kubernetes.sh
++++ b/tools/setup_kubernetes.sh
+@@ -25,9 +25,20 @@ apt-get update
+ apt-get install -y docker.io kubelet kubeadm kubectl kubernetes-cni
+ EOF
+ fi
++
++cat >> /tmp/setup.$$ <<"EOF"
++echo 'INSECURE_REGISTRY="--insecure-registry 192.168.122.81:4000"' > /etc/sysconfig/docker
++EOF
++
+ cat >> /tmp/setup.$$ <<"EOF"
+ systemctl start docker
+ EOF
++
++cat >> /tmp/setup.$$ <<"EOF"
++export KUBE_REPO_PREFIX="192.168.122.81:4000/gcr.io/google_containers"
++export KUBE_DISCOVERY_IMAGE="192.168.122.81:4000/gcr.io/google_containers/kube-discovery-amd64:1.0"
++EOF
++
+ if [ "$1" == "master" ]; then
+     cat >> /tmp/setup.$$ <<"EOF"
+ [ -d /etc/kubernetes/manifests ] && rmdir /etc/kubernetes/manifests || true
+diff --git a/tools/wait_for_pods.sh b/tools/wait_for_pods.sh
+index 95eca73..fc1b1df 100755
+--- a/tools/wait_for_pods.sh
++++ b/tools/wait_for_pods.sh
+@@ -1,7 +1,7 @@
+ #!/bin/bash -e
+ set +x
+ end=$(date +%s)
+-end=$((end + 180))
++end=$((end + 360))
+ while true; do
+     kubectl get pods --namespace=$1 -o json | jq -r \
+         '.items[].status.phase' | grep Pending > /dev/null && \
+
