@@ -20,6 +20,19 @@ index a4e47dd..fb15e32 100755
          docker_namespace: kolla
          kolla_base_distro: centos
          kolla_install_type: binary
+diff --git a/tests/conf/ceph-all-in-one/kolla_config b/tests/conf/ceph-all-in-one/kolla_config
+index d8df639..7676f23 100644
+--- a/tests/conf/ceph-all-in-one/kolla_config
++++ b/tests/conf/ceph-all-in-one/kolla_config
+@@ -39,7 +39,7 @@ nova_backend_ceph: "no"
+ set_sysctl: "no"
+
+ #Using snapshot for now, since compatible container is not released yet.
+-kolla_toolbox_image_full: kfox1111/centos-binary-kolla-toolbox:trunk-sometime
++kolla_toolbox_image_full: 192.168.122.81:4000/kfox1111/centos-binary-kolla-toolbox:trunk-sometime
+
+ #Using mitaka for now, as it has pull'able containers
+ mariadb_tag: '2.0.2'
 diff --git a/tests/bin/fix_gate_iptables.sh b/tests/bin/fix_gate_iptables.sh
 index 598b650..05d8180 100755
 --- a/tests/bin/fix_gate_iptables.sh
@@ -37,30 +50,32 @@ index 598b650..05d8180 100755
 -    sudo iptables -I INPUT 1 -i $line -j openstack-INPUT
 -done
 diff --git a/tests/bin/setup_canal.sh b/tests/bin/setup_canal.sh
-index 6b12dc5..c01c266 100755
+index 6b12dc5..16809ce 100755
 --- a/tests/bin/setup_canal.sh
 +++ b/tests/bin/setup_canal.sh
-@@ -9,6 +9,8 @@ curl "$url" -o /tmp/canal.yaml
+@@ -9,6 +9,10 @@ curl "$url" -o /tmp/canal.yaml
 
  sed -i "s@192.168.0.0/16@172.16.130.0/22@" /tmp/canal.yaml
  sed -i "s@10.96.232.136@172.16.128.100@" /tmp/canal.yaml
 +sed -i -e "s@quay.io@192.168.122.81:4000/quay.io@g" /tmp/canal.yaml
 +sed -i -e "s@gcr.io@192.168.122.81:4000/gcr.io@g" /tmp/canal.yaml
++sed -i -e "s@calico/cni@192.168.122.81:4000/calico/cni@g" /tmp/canal.yaml
++sed -i -e "s@calico/kube-policy-controller@192.168.122.81:4000/calico/kube-policy-controller@g" /tmp/canal.yaml
 
  kubectl create -f /tmp/canal.yaml
 
 diff --git a/tools/setup_gate.sh b/tools/setup_gate.sh
-index bfba8b8..e8ff7c2 100755
+index bfba8b8..2686ca3 100755
 --- a/tools/setup_gate.sh
 +++ b/tools/setup_gate.sh
-@@ -54,6 +54,7 @@ EOF
-     --branch master --cache-dir /opt/git git://git.openstack.org \
-     openstack/kolla-ansible && true
- [ ! -d kolla-ansible ] && git clone https://github.com/openstack/kolla-ansible.git
-+cd kolla-ansible; git checkout 9d3a60ecf993586f6f8a1e7c796ec8526e6b2227;cd - /
-
+@@ -58,6 +58,7 @@ EOF
  ###NOTE: (sbezverk) Temp workaround to the issue with the gate
  pushd kolla-ansible;
+ git checkout 4.0.0.0b2
++git apply ~/kansible.diff
+ popd
+
+ sudo ln -s `pwd`/kolla-ansible/etc/kolla /etc/kolla
 diff --git a/tools/setup_kubernetes.sh b/tools/setup_kubernetes.sh
 index db325a5..a6c4a65 100755
 --- a/tools/setup_kubernetes.sh

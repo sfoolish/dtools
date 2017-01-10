@@ -1,0 +1,13 @@
+diff --git a/ansible/group_vars/all.yml b/ansible/group_vars/all.yml
+index b259b8a..c0e90a4 100644
+--- a/ansible/group_vars/all.yml
++++ b/ansible/group_vars/all.yml
+@@ -68,7 +68,7 @@ database_port: "3306"
+ # Docker options
+ ####################
+ docker_registry_email:
+-docker_registry:
++docker_registry: "192.168.122.81:4000"
+ docker_namespace: "kolla"
+ docker_registry_username:
+
