@@ -1,4 +1,4 @@
-#!bin/bash
+#!/bin/bash
 
 # install docker
 curl -sSL https://get.docker.io | bash
