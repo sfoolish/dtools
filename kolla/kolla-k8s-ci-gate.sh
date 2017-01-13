@@ -5,7 +5,7 @@
 
 yum install -y epel-release
 
-yum install -y crudini cyrus-sasl-devel jq libcurl-devel libffi-devel openssl-devel python34-devel
+yum install -y crudini cyrus-sasl-devel jq libcurl-devel libffi-devel openssl-devel python34-devel bash-completion
 
 yum install -y git vim unbound python-virtualenv ansible
 yum group install -y "Development Tools"
@@ -29,3 +29,4 @@ mkdir -p $WORKSPACE/logs/
 
 tools/setup_gate.sh deploy centos binary ceph centos-7 shell
 
+echo "source <(kubectl completion bash)" >> ~/.bashrc
