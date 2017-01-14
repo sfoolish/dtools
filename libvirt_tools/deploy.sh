@@ -77,7 +77,7 @@ function launch_host_vms() {
     i=0
     for host in $HOSTNAMES; do
         echo "creating vm disk for instance $host" \
-             "ip ${IPADDR_PREFIX}$((i+51))" \
+             "ip ${IPADDR_PREFIX}$((IPADDR_START+i))" \
              "mac ${mac_array[$i]}"
         vm_dir=$host_vm_dir/$host
         mkdir -p $vm_dir
@@ -85,7 +85,7 @@ function launch_host_vms() {
         cp ${WORK_DIR}/cache/$IMAGE_NAME $vm_dir
 
         # create seed.iso
-        sed -e "s/REPLACE_IPADDR/${IPADDR_PREFIX}$((i+51))/g" \
+        sed -e "s/REPLACE_IPADDR/${IPADDR_PREFIX}$((IPADDR_START+i))/g" \
             -e "s/REPLACE_GATEWAY/${IPADDR_PREFIX}1/g" \
             -e "s/REPLACE_HOSTNAME/${host}/g" \
             meta-data_template \
@@ -150,6 +150,17 @@ function root_auth_setup()
     "
 }
 
+function set_all_root_auth()
+{
+
+    i=0
+    for host in $HOSTNAMES; do
+        wait_ok "${IPADDR_PREFIX}$((IPADDR_START+i))" 100
+        root_auth_setup "${IPADDR_PREFIX}$((IPADDR_START+i))"
+        let i=i+1
+    done
+}
+
 source ./env_config.sh
 
 SCRIPT_DIR=`cd ${BASH_SOURCE[0]%/*};pwd`
@@ -163,8 +174,7 @@ host_vm_dir=$WORK_DIR/vm
 download_iso
 setup_nat_net mgmt-net $MGMT_NET_GW $MGMT_NET_MASK $MGMT_NET_IP_START $MGMT_NET_IP_END
 launch_host_vms
-wait_ok "192.168.122.51" 25
-root_auth_setup "192.168.122.51"
+set_all_root_auth
 
 set +x
 

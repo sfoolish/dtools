@@ -18,6 +18,7 @@ export VIRT_CPUS=${VIRT_CPUS:-"4"}
 export IMAGE_URL=${IMAGE_URL:-"http://cloud.centos.org/centos/7/images/CentOS-7-x86_64-GenericCloud.qcow2"}
 export IMAGE_NAME=${IMAGE_NAME:-"disk.img"}
 export IPADDR_PREFIX=${IPADDR_PREFIX:-"192.168.122."}
+export IPADDR_START=${IPADDR_START:-"50"}
 
 export MGMT_NET_GW="192.168.222.1"
 export MGMT_NET_MASK="255.255.255.0"
