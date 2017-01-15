@@ -123,7 +123,7 @@ function launch_host_vms() {
 function wait_ok() {
     MGMT_IP=$1
     set +x
-    echo "wait_ok enter"
+    echo "wait_ok enter $MGMT_IP"
     ssh-keygen -f "/root/.ssh/known_hosts" -R $MGMT_IP >/dev/null 2>&1
     retry=0
     until timeout 1s ssh $ssh_args centos@$MGMT_IP "exit" >/dev/null 2>&1
@@ -152,13 +152,51 @@ function root_auth_setup()
 
 function set_all_root_auth()
 {
-
+    old_ifs=$IFS
+    IFS=,
     i=0
     for host in $HOSTNAMES; do
+        IFS=$old_ifs
         wait_ok "${IPADDR_PREFIX}$((IPADDR_START+i))" 100
         root_auth_setup "${IPADDR_PREFIX}$((IPADDR_START+i))"
         let i=i+1
+        IFS=,
     done
+
+    IFS=$old_ifs
+}
+
+function clear_all_seed_cdrom_for_vm()
+{
+    old_ifs=$IFS
+    IFS=,
+    i=0
+    for host in $HOSTNAMES; do
+        IFS=$old_ifs
+        vm_dir=$host_vm_dir/$host
+        grep "cdrom" $vm_dir/libvirt.xml
+        if [ $? != 0 ]; then
+            continue
+        fi
+        #sudo virsh destroy $host
+        ssh -tt $ssh_args "${IPADDR_PREFIX}$((IPADDR_START+i))" "
+            hostname $host
+            echo $host > /etc/hostname
+            /etc/init.d/network restart
+            poweroff
+        "
+        sleep 1
+        sudo virsh destroy $host
+        sudo virsh undefine $host
+        cp $vm_dir/libvirt.xml $vm_dir/libvirt.xml_seed.iso
+        sudo sed -i '/cdrom/,/disk/d' $vm_dir/libvirt.xml
+        sudo virsh define $vm_dir/libvirt.xml
+        sudo virsh start $host
+        let i=i+1
+        IFS=,
+    done
+
+    IFS=$old_ifs
 }
 
 source ./env_config.sh
@@ -175,6 +213,7 @@ download_iso
 setup_nat_net mgmt-net $MGMT_NET_GW $MGMT_NET_MASK $MGMT_NET_IP_START $MGMT_NET_IP_END
 launch_host_vms
 set_all_root_auth
+clear_all_seed_cdrom_for_vm
 
 set +x
 
