@@ -188,6 +188,7 @@ function clear_all_seed_cdrom_for_vm()
             hostname $host
             echo $host > /etc/hostname
             /etc/init.d/network restart
+            sync; sync;
             poweroff
         "
         # FIXME
