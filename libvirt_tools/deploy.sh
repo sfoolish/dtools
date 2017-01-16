@@ -191,11 +191,11 @@ function clear_all_seed_cdrom_for_vm()
             sync; sync;
             poweroff
         "
-        # FIXME
-        sleep 3
+
         # force destroy if not finish yet
         sudo virsh destroy $host || true
         sudo virsh undefine $host
+        cp $vm_dir/disk.img $vm_dir/disk.img_clean_with_key
         cp $vm_dir/libvirt.xml $vm_dir/libvirt.xml_seed.iso
         sudo sed -i '/cdrom/,/disk/d' $vm_dir/libvirt.xml
         sudo virsh define $vm_dir/libvirt.xml
