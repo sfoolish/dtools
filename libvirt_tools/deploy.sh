@@ -114,6 +114,11 @@ function launch_host_vms() {
 
         sudo virsh define $vm_dir/libvirt.xml
         sudo virsh start $host
+
+        ssh-keygen -f "/root/.ssh/known_hosts" -R ${host}
+        sed -i "/${IPADDR_PREFIX}$((IPADDR_START+i))/d" /etc/hosts
+        sed -i "/${host}/d" /etc/hosts
+        echo "${IPADDR_PREFIX}$((IPADDR_START+i)) ${host}" >> /etc/hosts
         let i=i+1
     done
     IFS=$old_ifs
@@ -185,8 +190,10 @@ function clear_all_seed_cdrom_for_vm()
             /etc/init.d/network restart
             poweroff
         "
-        sleep 1
-        sudo virsh destroy $host
+        # FIXME
+        sleep 3
+        # force destroy if not finish yet
+        sudo virsh destroy $host || true
         sudo virsh undefine $host
         cp $vm_dir/libvirt.xml $vm_dir/libvirt.xml_seed.iso
         sudo sed -i '/cdrom/,/disk/d' $vm_dir/libvirt.xml
