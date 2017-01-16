@@ -192,6 +192,7 @@ function clear_all_seed_cdrom_for_vm()
             poweroff
         "
 
+        sleep 3
         # force destroy if not finish yet
         sudo virsh destroy $host || true
         sudo virsh undefine $host
