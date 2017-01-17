@@ -1,8 +1,12 @@
 #!/bin/bash
 set -x
 
+pushd ../
+git apply kolla/kk8-libvirt-env.diff
+popd
+
 # DATE=$(date +"%y-%m-%d-%T")
-DATE=$(date +"%y-%m-%d")
+DATE=$(date +"%y-%m-%d-%H")
 LOG_DIR=/tmp/k8s-ci-${DATE}
 
 mkdir -p ${LOG_DIR}
@@ -12,7 +16,7 @@ pushd ../libvirt_tools
 
 i=0
 while [ $i -lt 10 ]; do
-  ./deploy.sh 2>&1 | tee -a ${LOG_DIR}/libvirt_deploy.log
+  ./deploy.sh 2>&1 | ts '[%Y-%m-%d %H:%M:%S]' | tee -a ${LOG_DIR}/libvirt_deploy.log
   sleep 10
   ssh kmaster "hostname"
   if [ $? == 0 ]; then
@@ -44,3 +48,4 @@ fi
 scp kk8s-ci-gate-on-line.sh kmaster:~/
 ssh -t kmaster ~/kk8s-ci-gate-on-line.sh 2>&1 | ts '[%Y-%m-%d %H:%M:%S]' | tee -a ${LOG_DIR}/kk8s-ci.log
 
+git checkout ../
