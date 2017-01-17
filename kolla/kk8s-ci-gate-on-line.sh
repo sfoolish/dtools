@@ -54,7 +54,7 @@ EOEF
     systemctl start kubelet
     systemctl start docker
 
-    cat docker_images.txt | while read image; do
+    cat ~/docker_images.txt | while read image; do
         docker pull $image
     done
 else
