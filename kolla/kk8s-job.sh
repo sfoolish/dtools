@@ -1,9 +1,11 @@
 #!/bin/bash
 set -x
 
+WORK_DIR=`cd ${BASH_SOURCE[0]%/*}/;pwd`
 DATE=$(date +"%y-%m-%d-%H")
 LOG_DIR=/tmp/k8s-ci-${DATE}
 
+cd $WORK_DIR
 mkdir -p ${LOG_DIR}
 
 ./kk8s-create-vms.sh
