@@ -2,7 +2,7 @@
 set -x
 
 pushd ../
-git apply kolla/kk8-libvirt-env.diff
+git apply kolla/kk8s-libvirt-env.diff
 popd
 
 # DATE=$(date +"%y-%m-%d-%T")
