@@ -72,4 +72,3 @@ docker.io/kolla/centos-binary-openvswitch-vswitchd:3.0.2
 docker.io/kolla/centos-binary-openvswitch-db-server:3.0.2
 docker.io/kolla/centos-binary-rabbitmq:3.0.2
 docker.io/kolla/centos-binary-memcached:3.0.2
-
