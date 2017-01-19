@@ -11,7 +11,7 @@ echo "cleaned by sf"
 EOF
 
 date |tee -a ~/deploy.log;\
-./tools/setup_gate.sh deploy centos binary ceph centos-7 shell 2>&1 | tee -a ~/deploy.log;\
+./tools/setup_gate.sh deploy centos binary ceph centos-7 shell 2 2>&1 | tee -a ~/deploy.log;\
 date |tee -a ~/deploy.log
 EEOF
 
