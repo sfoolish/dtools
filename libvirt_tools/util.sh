@@ -8,6 +8,8 @@
 # http://www.apache.org/licenses/LICENSE-2.0
 ##############################################################################
 
+ssh_args="-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i /root/.ssh/id_rsa"
+
 function download_iso()
 {
     mkdir -p ${WORK_DIR}/cache
@@ -123,7 +125,7 @@ function launch_host_vms() {
 
 function wait_ok() {
     MGMT_IP=$1
-    set +x
+    #set +x
     echo "wait_ok enter $MGMT_IP"
     ssh-keygen -f "/root/.ssh/known_hosts" -R $MGMT_IP >/dev/null 2>&1
     retry=0

@@ -11,7 +11,6 @@ set -x
 
 SCRIPT_DIR=`cd ${BASH_SOURCE[0]%/*};pwd`
 WORK_DIR=${SCRIPT_DIR}/work
-ssh_args="-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i /root/.ssh/id_rsa"
 pushd $SCRIPT_DIR
 
 source ./env_config.sh

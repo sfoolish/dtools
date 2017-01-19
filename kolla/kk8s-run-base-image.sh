@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -ex
+set -x
 
 WORK_DIR=`cd ${BASH_SOURCE[0]%/*}/;pwd`
 HOST_NAME=$1
