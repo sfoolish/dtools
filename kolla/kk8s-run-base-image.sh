@@ -1,32 +1,25 @@
 #!/bin/bash
 
-cat << "EEOF" > deploy.sh
-#!/bin/bash
-ifconfig eth1 192.168.222.2/24
-cd /home/jenkins/workspace/gate-kolla-kubernetes-deploy-centos-binary-ceph-nv/
+set -ex
 
-git checkout ./
-git pull
+WORK_DIR=`cd ${BASH_SOURCE[0]%/*}/;pwd`
+HOST_NAME=$1
+IMAGE_NAME=$2
+HOST_NAME=${HOST_NAME:-kmaster}
+IMAGE_NAME=${IMAGE_NAME:-disk.img_image-pulled}
 
-sed  -ie "s/180/360/g" tools/wait_for_pods.sh
-sed  -ie "s/240/480/g" tools/setup_gate.sh
-sed  -ie "s/240/480/g" tools/setup_gate_iscsi.sh
-sed  -ie "s/240/480/g" tools/setup_rbd_volumes.sh
+cd $WORK_DIR
+source ../libvirt_tools/util.sh
 
+pushd ../libvirt_tools/work/vm/$HOST_NAME
+virsh destroy $HOST_NAME || true
+cp $IMAGE_NAME disk.img
+virsh start $HOST_NAME
+popd
 
-cat << EOF > tests/bin/fix_gate_iptables.sh
-#!/bin/bash -xe
+wait_ok $HOST_NAME 100
 
-echo "cleaned by sf"
+scp kk8s-base-image-gate.sh $HOST_NAME:~/
 
-EOF
-
-
-date |tee -a ~/deploy.log;\
-./tools/setup_gate.sh deploy centos binary ceph centos-7 shell 2 2>&1 | tee -a ~/deploy.log;\
-date |tee -a ~/deploy.log
-EEOF
-
-chmod +x deploy.sh
-./deploy.sh
+ssh -t $HOST_NAME ~/kk8s-base-image-gate.sh
 
