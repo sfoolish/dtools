@@ -19,7 +19,3 @@ popd
 
 wait_ok $HOST_NAME 100
 
-scp kk8s-base-image-gate.sh $HOST_NAME:~/
-
-ssh -t $HOST_NAME ~/kk8s-base-image-gate.sh
-
