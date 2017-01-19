@@ -6,5 +6,6 @@ apt-get install -y \
     genisoimage \
     libvirt-bin \
     qemu-kvm \
+    moreutils \
     wget
 

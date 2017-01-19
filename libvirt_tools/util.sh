@@ -125,7 +125,7 @@ function launch_host_vms() {
 
 function wait_ok() {
     MGMT_IP=$1
-    #set +x
+    set +x
     echo "wait_ok enter $MGMT_IP"
     ssh-keygen -f "/root/.ssh/known_hosts" -R $MGMT_IP >/dev/null 2>&1
     retry=0
@@ -141,6 +141,7 @@ function wait_ok() {
             return
         fi
     done
+    set -x
     echo "wait_ok exit"
 }
 
