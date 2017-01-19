@@ -13,7 +13,15 @@ source ../libvirt_tools/util.sh
 
 pushd ../libvirt_tools/work/vm/$HOST_NAME
 virsh destroy $HOST_NAME || true
-cp $IMAGE_NAME disk.img
+
+if [ -f $IMAGE_NAME ]; then
+    cp $IMAGE_NAME disk.img
+elif [ -f ../../cache/$IMAGE_NAME ]; then
+    cp ../../cache/$IMAGE_NAME disk.img
+elif [ -f /opt/kk8s/$IMAGE_NAME ]; then
+    cp /opt/kk8s/$IMAGE_NAME disk.img
+fi
+
 virsh start $HOST_NAME
 popd
 
