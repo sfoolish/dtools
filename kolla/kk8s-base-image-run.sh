@@ -12,5 +12,5 @@ cd $WORK_DIR
 
 scp kolla-k8s-ci-gate-base-image.sh $HOST_NAME:~/
 
-ssh -t $HOST_NAME ~/kolla-k8s-ci-gate-base-image.sh
+ssh -tt $HOST_NAME ~/kolla-k8s-ci-gate-base-image.sh
 
