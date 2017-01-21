@@ -62,7 +62,7 @@ EOEF
         docker pull $image
     done
 else
-    ./tools/setup_gate.sh deploy centos binary ceph centos-7 shell 2
+    ./tools/setup_gate.sh deploy centos binary ceph centos-7 shell 3
 fi
 
 echo "source <(kubectl completion bash)" >> ~/.bashrc

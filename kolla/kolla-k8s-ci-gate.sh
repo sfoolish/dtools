@@ -27,6 +27,6 @@ git apply ~/kk8s.diff
 
 mkdir -p $WORKSPACE/logs/
 
-./tools/setup_gate.sh deploy centos binary ceph centos-7 shell 2
+./tools/setup_gate.sh deploy centos binary ceph centos-7 shell 3
 
 echo "source <(kubectl completion bash)" >> ~/.bashrc
