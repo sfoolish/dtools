@@ -7,7 +7,7 @@ yum install -y epel-release
 
 yum install -y crudini cyrus-sasl-devel jq libcurl-devel libffi-devel openssl-devel python34-devel bash-completion
 
-yum install -y git vim unbound python-virtualenv ansible
+yum install -y git vim unbound python-virtualenv ansible moreutils
 yum group install -y "Development Tools"
 
 ifconfig eth1 192.168.222.2/24
