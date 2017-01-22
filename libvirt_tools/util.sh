@@ -149,8 +149,8 @@ function root_auth_setup()
 {
     MGMT_IP=$1
     ssh -tt $ssh_args centos@$MGMT_IP "
-        sudo sed -ie 's/ssh-rsa/\n&/g' /root/.ssh/authorized_keys
-        sudo sed -ie '/echo/d' /root/.ssh/authorized_keys
+        sudo sed -i -e 's/ssh-rsa/\n&/g' /root/.ssh/authorized_keys
+        sudo sed -i -e '/echo/d' /root/.ssh/authorized_keys
     "
 }
 
@@ -175,7 +175,7 @@ function root_ssh_config_setup()
     MGMT_IP=$1
     scp $ssh_args /root/.ssh/config /root/.ssh/id_rsa* $MGMT_IP:/root/.ssh/
     scp $ssh_args /etc/hosts $MGMT_IP:/etc/hosts
-    ssh -tt $ssh_args $MGMT_IP 'sed -ie "s/Defaults    requiretty/Defaults    \!requiretty/g" /etc/sudoers'
+    ssh -tt $ssh_args $MGMT_IP 'sed -i -e "s/Defaults    requiretty/Defaults    \!requiretty/g" /etc/sudoers'
 }
 
 function set_all_ssh_config()
