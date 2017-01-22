@@ -170,6 +170,30 @@ function set_all_root_auth()
     IFS=$old_ifs
 }
 
+function root_ssh_config_setup()
+{
+    MGMT_IP=$1
+    scp $ssh_args /root/.ssh/config /root/.ssh/id_rsa* $MGMT_IP:/root/.ssh/
+    scp $ssh_args /etc/hosts $MGMT_IP:/etc/hosts
+    ssh -tt $ssh_args $MGMT_IP 'sed -ie "s/Defaults    requiretty/Defaults    \!requiretty/g" /etc/sudoers'
+}
+
+function set_all_ssh_config()
+{
+    old_ifs=$IFS
+    IFS=,
+    i=0
+    for host in $HOSTNAMES; do
+        IFS=$old_ifs
+        root_ssh_config_setup "${IPADDR_PREFIX}$((IPADDR_START+i))"
+        let i=i+1
+        IFS=,
+    done
+
+    IFS=$old_ifs
+}
+
+
 function clear_all_seed_cdrom_for_vm()
 {
     old_ifs=$IFS

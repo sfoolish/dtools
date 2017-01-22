@@ -22,6 +22,7 @@ download_iso
 setup_nat_net mgmt-net $MGMT_NET_GW $MGMT_NET_MASK $MGMT_NET_IP_START $MGMT_NET_IP_END
 launch_host_vms
 set_all_root_auth
+set_all_ssh_config
 clear_all_seed_cdrom_for_vm
 
 set +x
