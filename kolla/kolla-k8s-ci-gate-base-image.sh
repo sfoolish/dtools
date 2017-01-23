@@ -1,6 +1,13 @@
 #!/bin/bash
 
 ifconfig eth1 192.168.222.2/24
+ssh kmn1 ifconfig eth1 192.168.222.3/24
+ssh kmn2 ifconfig eth1 192.168.222.4/24
+
+cat << "EEOF" > /etc/nodepool/sub_nodes_private
+192.168.222.3
+192.168.222.4
+EEOF
 
 cd /home/jenkins/workspace/gate-kolla-kubernetes-deploy-centos-binary-ceph-nv/
 
@@ -19,7 +26,7 @@ echo "cleaned by sf"
 
 EOF
 
-date |tee -a ~/deploy.log;\
-./tools/setup_gate.sh deploy centos binary ceph centos-7 shell 3 2>&1 | tee -a ~/deploy.log;\
-date |tee -a ~/deploy.log
+date | ts '[%Y-%m-%d %H:%M:%S]' | tee -a ~/deploy.log;\
+./tools/setup_gate.sh deploy centos binary ceph-multi centos-7-2-node shell 3 2>&1 | ts '[%Y-%m-%d %H:%M:%S]' | tee -a ~/deploy.log
+date | ts '[%Y-%m-%d %H:%M:%S]' | tee -a ~/deploy.log
 

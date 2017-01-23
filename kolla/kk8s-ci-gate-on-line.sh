@@ -15,6 +15,14 @@ ifconfig eth1 192.168.222.2/24
 mkdir -p /etc/nodepool
 echo "192.168.222.2" > /etc/nodepool/primary_node_private
 
+ssh kmn1 ifconfig eth1 192.168.222.3/24
+ssh kmn2 ifconfig eth1 192.168.222.4/24
+
+cat << "EEOF" > /etc/nodepool/sub_nodes_private
+192.168.222.3
+192.168.222.4
+EEOF
+
 export WORKSPACE=/home/jenkins/workspace/gate-kolla-kubernetes-deploy-centos-binary-ceph-nv
 
 mkdir -p $WORKSPACE
@@ -62,7 +70,7 @@ EOEF
         docker pull $image
     done
 else
-    ./tools/setup_gate.sh deploy centos binary ceph centos-7 shell 3
+    ./tools/setup_gate.sh deploy centos binary ceph-multi centos-7-2-node shell 3
 fi
 
 echo "source <(kubectl completion bash)" >> ~/.bashrc
