@@ -1,0 +1,45 @@
+diff --git a/tests/bin/gate_capture_logs.sh b/tests/bin/gate_capture_logs.sh
+index 30cca21..ccd98ea 100755
+--- a/tests/bin/gate_capture_logs.sh
++++ b/tests/bin/gate_capture_logs.sh
+@@ -99,8 +99,8 @@ openstack volume list > $WORKSPACE/logs/volumes.txt
+ cp -a /etc/kolla $WORKSPACE/logs/
+ cp /usr/bin/rbd $WORKSPACE/logs/rbd.sh
+ [ -f /etc/nodepool/sub_nodes_private ] && cat /etc/nodepool/sub_nodes_private | while read line; do
+-    ssh $line sudo journalctl -u kubelet > $WORKSPACE/logs/kubelet-$line.txt
+-    ssh $line ps ax > $WORKSPACE/logs/ps-$line.txt
++    ssh -n $line sudo journalctl -u kubelet > $WORKSPACE/logs/kubelet-$line.txt
++    ssh -n $line ps ax > $WORKSPACE/logs/ps-$line.txt
+ done
+ ovs-vsctl show > $WORKSPACE/logs/ovs.txt
+ arp -a > $WORKSPACE/logs/arp.txt
+diff --git a/tools/setup_gate.sh b/tools/setup_gate.sh
+index f23377c..5deff81 100755
+--- a/tools/setup_gate.sh
++++ b/tools/setup_gate.sh
+@@ -122,17 +122,17 @@ if [ "x$4" == "xceph-multi" ]; then
+         scp tools/setup_kubernetes.sh $line:
+         scp tests/bin/fix_gate_iptables.sh $line:
+         scp /usr/bin/kubectl $line:kubectl
+-        NODENAME=$(ssh $line hostname)
+-        ssh $line bash fix_gate_iptables.sh
+-        ssh $line sudo iptables-save > $WORKSPACE/logs/iptables-$line.txt
+-        ssh $line sudo setenforce 0
++        NODENAME=$(ssh -n $line hostname)
++        ssh -n $line bash fix_gate_iptables.sh
++        ssh -n $line sudo iptables-save > $WORKSPACE/logs/iptables-$line.txt
++        ssh -n $line sudo setenforce 0
+         if [ "x$2" == "xubuntu" ]; then
+-           ssh $line sudo apt-get -y remove open-iscsi
++           ssh -n $line sudo apt-get -y remove open-iscsi
+         else
+-           ssh $line sudo yum remove -y iscsi-initiator-utils
++           ssh -n $line sudo yum remove -y iscsi-initiator-utils
+         fi
+-        ssh $line sudo mv kubectl /usr/bin/
+-        ssh $line bash setup_kubernetes.sh slave "$(cat /etc/kubernetes/token.txt)" "$(cat /etc/kubernetes/ip.txt)"
++        ssh -n $line sudo mv kubectl /usr/bin/
++        ssh -n $line bash setup_kubernetes.sh slave "$(cat /etc/kubernetes/token.txt)" "$(cat /etc/kubernetes/ip.txt)
+         set +xe
+         count=0
+         while true; do

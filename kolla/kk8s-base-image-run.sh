@@ -10,7 +10,7 @@ IMAGE_NAME=${IMAGE_NAME:-disk.img_image-pulled}
 
 cd $WORK_DIR
 
-scp kolla-k8s-ci-gate-base-image.sh $HOST_NAME:~/
+scp setup_gate.diff kolla-k8s-ci-gate-base-image.sh $HOST_NAME:~/
 
 ssh -tt $HOST_NAME ~/kolla-k8s-ci-gate-base-image.sh
 
