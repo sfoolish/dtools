@@ -129,16 +129,27 @@ function wait_ok() {
     echo "wait_ok enter $MGMT_IP"
     ssh-keygen -f "/root/.ssh/known_hosts" -R $MGMT_IP >/dev/null 2>&1
     retry=0
-    until timeout 1s ssh $ssh_args centos@$MGMT_IP "exit" >/dev/null 2>&1
+    while true
     do
         ssh $ssh_args centos@$MGMT_IP "exit" >/dev/null 2>&1
+        [ $? -eq 0 ] && break
+
         echo "os install time used: $((retry*100/$2))%"
         sleep 1
         let retry+=1
         if [[ $retry -ge $2 ]];then
-            timeout 1s ssh $ssh_args centos@$MGMT_IP "exit"
+            # first try
+            ssh $ssh_args centos@$MGMT_IP "exit"
+            # second try
+            ssh $ssh_args centos@$MGMT_IP "exit"
+            exit_status=$?
+            if [[ $exit_status == 0 ]]; then
+                echo "final ssh login compass success !!!"
+                break
+            fi
+            echo "final ssh retry failed with status: " $exit_status
             echo "os install time out"
-            return
+            exit 1
         fi
     done
     set -x

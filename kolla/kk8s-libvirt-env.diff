@@ -1,8 +1,8 @@
 diff --git a/libvirt_tools/env_config.sh b/libvirt_tools/env_config.sh
-index 0435cff..a152864 100644
+index 0435cff..391471a 100644
 --- a/libvirt_tools/env_config.sh
 +++ b/libvirt_tools/env_config.sh
-@@ -9,16 +9,17 @@
+@@ -9,16 +9,18 @@
  
  # this is a modified copy of bottlenecks/utils/rubbos_dev_env_setup/env_config.sh
  
@@ -10,10 +10,11 @@ index 0435cff..a152864 100644
 -export VIRT_NUMBER=${VIRT_NUMBER:-"1"}
 -export VIRT_MEM=${VIRT_MEM:-"4096"}
 -export VIRT_CPUS=${VIRT_CPUS:-"4"}
-+export HOSTNAMES=${HOSTNAMES:-"krepo,kmaster"}
-+export VIRT_NUMBER=${VIRT_NUMBER:-"2"}
-+export VIRT_MEM=${VIRT_MEM:-"40960"}
-+export VIRT_CPUS=${VIRT_CPUS:-"12"}
++# kmr -> kk8s multinodes repo, kmm -> kk8s multinodes master, kmn -> node
++export HOSTNAMES=${HOSTNAMES:-"kmr0,kmm0,kmn1,kmn2"}
++export VIRT_NUMBER=${VIRT_NUMBER:-"4"}
++export VIRT_MEM=${VIRT_MEM:-"8192"}
++export VIRT_CPUS=${VIRT_CPUS:-"6"}
  # centos atomic
  #export IMAGE_URL=http://cloud.centos.org/centos/7/atomic/images/CentOS-Atomic-Host-7-GenericCloud.qcow2
 +export IMAGE_URL=http://a2:8888/CentOS-7-x86_64-GenericCloud.qcow2
@@ -21,7 +22,7 @@ index 0435cff..a152864 100644
  export IMAGE_NAME=${IMAGE_NAME:-"disk.img"}
  export IPADDR_PREFIX=${IPADDR_PREFIX:-"192.168.122."}
 -export IPADDR_START=${IPADDR_START:-"50"}
-+export IPADDR_START=${IPADDR_START:-"81"}
++export IPADDR_START=${IPADDR_START:-"90"}
  
  export MGMT_NET_GW="192.168.222.1"
  export MGMT_NET_MASK="255.255.255.0"

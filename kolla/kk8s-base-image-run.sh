@@ -5,7 +5,7 @@ set -x
 WORK_DIR=`cd ${BASH_SOURCE[0]%/*}/;pwd`
 HOST_NAME=$1
 IMAGE_NAME=$2
-HOST_NAME=${HOST_NAME:-kmaster}
+HOST_NAME=${HOST_NAME:-kmm0}
 IMAGE_NAME=${IMAGE_NAME:-disk.img_image-pulled}
 
 cd $WORK_DIR

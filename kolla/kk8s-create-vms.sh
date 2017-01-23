@@ -18,18 +18,18 @@ i=0
 while [ $i -lt 10 ]; do
   ./deploy.sh 2>&1 | ts '[%Y-%m-%d %H:%M:%S]' | tee -a ${LOG_DIR}/libvirt_deploy.log
   sleep 10
-  ssh kmaster "hostname"
+  ssh kmm0 "hostname"
   if [ $? == 0 ]; then
     echo "Depoloy success!" >> ${LOG_DIR}/libvirt_deploy.log
     break
   fi
   
   # try restart vm
-  virsh destroy kmaster
+  virsh destroy kmm0
   sleep 1
-  virsh start kmaster
+  virsh start kmm0
   sleep 10
-  ssh kmaster "hostname"
+  ssh kmm0 "hostname"
   if [ $? == 0 ]; then
     echo "Depoloy success after restart!" >> ${LOG_DIR}/libvirt_deploy.log
     break
@@ -39,7 +39,7 @@ done
 
 popd
 
-ssh kmaster "hostname"
+ssh kmm0 "hostname"
 if [ $? != 0 ]; then
   echo "!!! Deploy Failed EXIT !!!" >> ${LOG_DIR}/libvirt_deploy.log
   exit 1
