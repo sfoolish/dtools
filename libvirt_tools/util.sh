@@ -149,7 +149,7 @@ function wait_ok() {
             fi
             echo "final ssh retry failed with status: " $exit_status
             echo "os install time out"
-            exit 1
+            return
         fi
     done
     set -x
