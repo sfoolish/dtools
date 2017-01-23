@@ -7,7 +7,7 @@ yum install -y epel-release
 
 yum install -y crudini cyrus-sasl-devel jq libcurl-devel libffi-devel openssl-devel python34-devel bash-completion
 
-yum install -y git vim unbound python-virtualenv ansible
+yum install -y git vim unbound python-virtualenv ansible moreutils
 yum group install -y "Development Tools"
 
 ifconfig eth1 192.168.222.2/24
@@ -62,7 +62,7 @@ EOEF
         docker pull $image
     done
 else
-    ./tools/setup_gate.sh deploy centos binary ceph centos-7 shell 2
+    ./tools/setup_gate.sh deploy centos binary ceph centos-7 shell 3
 fi
 
 echo "source <(kubectl completion bash)" >> ~/.bashrc

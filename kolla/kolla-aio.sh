@@ -6,7 +6,7 @@ set -x
 
 yum install -y epel-release
 yum install -y python-pip
-yum install -y vim wget
+yum install -y vim wget moreutils
 pip install -U pip
 
 curl -sSL https://get.docker.io | bash
