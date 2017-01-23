@@ -1,4 +1,5 @@
 #!/bin/bash
+set -x
 
 ifconfig eth1 192.168.222.2/24
 ssh kmn1 ifconfig eth1 192.168.222.3/24
@@ -31,4 +32,6 @@ EOF
 date | ts '[%Y-%m-%d %H:%M:%S]' | tee -a ~/deploy.log;\
 ./tools/setup_gate.sh deploy centos binary ceph-multi centos-7-2-node shell 3 2>&1 | ts '[%Y-%m-%d %H:%M:%S]' | tee -a ~/deploy.log
 date | ts '[%Y-%m-%d %H:%M:%S]' | tee -a ~/deploy.log
+
+set +x
 

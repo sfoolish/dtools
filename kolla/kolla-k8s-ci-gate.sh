@@ -1,4 +1,5 @@
 #!/bin/bash
+set -x
 
 # http://logs.openstack.org/71/415171/1/check/gate-kolla-kubernetes-deploy-centos-binary-ceph-nv/4725106/console.html
 # http://www.tecmint.com/setup-dns-cache-server-in-centos-7/
@@ -38,3 +39,5 @@ mkdir -p $WORKSPACE/logs/
 ./tools/setup_gate.sh deploy centos binary ceph-multi centos-7-2-node shell 3
 
 echo "source <(kubectl completion bash)" >> ~/.bashrc
+
+set +x
