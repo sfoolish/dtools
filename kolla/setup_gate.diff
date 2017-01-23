@@ -39,7 +39,7 @@ index f23377c..5deff81 100755
 -        ssh $line sudo mv kubectl /usr/bin/
 -        ssh $line bash setup_kubernetes.sh slave "$(cat /etc/kubernetes/token.txt)" "$(cat /etc/kubernetes/ip.txt)"
 +        ssh -n $line sudo mv kubectl /usr/bin/
-+        ssh -n $line bash setup_kubernetes.sh slave "$(cat /etc/kubernetes/token.txt)" "$(cat /etc/kubernetes/ip.txt)
++        ssh -n $line bash setup_kubernetes.sh slave "$(cat /etc/kubernetes/token.txt)" "$(cat /etc/kubernetes/ip.txt)"
          set +xe
          count=0
          while true; do
