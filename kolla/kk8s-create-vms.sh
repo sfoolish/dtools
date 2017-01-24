@@ -45,5 +45,4 @@ if [ $? != 0 ]; then
   exit 1
 fi
 
-git checkout ../
-
+git checkout ../libvirt_tools/env_config.sh
