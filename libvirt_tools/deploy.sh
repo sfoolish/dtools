@@ -16,6 +16,10 @@ function download_iso()
 {
     mkdir -p ${WORK_DIR}/cache
     curl --connect-timeout 10 -o ${WORK_DIR}/cache/$IMAGE_NAME $IMAGE_URL
+    IMAGE_SIZE=$(qemu-img info ${WORK_DIR}/cache/$IMAGE_NAME | awk 'match($0,/virtual size/) {print int(strtonum($3))}')
+    if [ $IMAGE_SIZE -lt 50 ]; then
+        qemu-img resize ${WORK_DIR}/cache/$IMAGE_NAME +50G
+    fi
 }
 
 
@@ -163,8 +167,13 @@ host_vm_dir=$WORK_DIR/vm
 download_iso
 setup_nat_net mgmt-net $MGMT_NET_GW $MGMT_NET_MASK $MGMT_NET_IP_START $MGMT_NET_IP_END
 launch_host_vms
+
 wait_ok "192.168.122.11" 25
 root_auth_setup "192.168.122.11"
+
+wait_ok "192.168.122.12" 25
+root_auth_setup "192.168.122.12"
+
 
 set +x
 

@@ -13,8 +13,9 @@ export HOSTNAMES=${HOSTNAMES:-"ubuntu1,ubuntu2"}
 export VIRT_NUMBER=${VIRT_NUMBER:-"2"}
 export VIRT_MEM=${VIRT_MEM:-"4096"}
 export VIRT_CPUS=${VIRT_CPUS:-"4"}
-# export IMAGE_URL="https://cloud-images.ubuntu.com/xenial/current/xenial-server-cloudimg-amd64-disk1.img"
-export IMAGE_URL=${IMAGE_URL:-"https://cloud-images.ubuntu.com/trusty/current/trusty-server-cloudimg-amd64-disk1.img"}
+#export IMAGE_URL=http://a2:8888/xenial-server-cloudimg-amd64-disk1.img
+#export IMAGE_URL=${IMAGE_URL:-"https://cloud-images.ubuntu.com/trusty/current/trusty-server-cloudimg-amd64-disk1.img"}
+export IMAGE_URL=${IMAGE_URL:-"https://cloud-images.ubuntu.com/xenial/current/xenial-server-cloudimg-amd64-disk1.img"}
 export IMAGE_NAME=${IMAGE_NAME:-"disk.img"}
 export IPADDR_PREFIX=${IPADDR_PREFIX:-"192.168.122."}
 
