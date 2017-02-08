@@ -14,6 +14,10 @@ function download_iso()
 {
     mkdir -p ${WORK_DIR}/cache
     curl --connect-timeout 10 -o ${WORK_DIR}/cache/$IMAGE_NAME $IMAGE_URL
+    IMAGE_SIZE=$(qemu-img info ${WORK_DIR}/cache/$IMAGE_NAME | awk 'match($0,/virtual size/) {print int(strtonum($3))}')
+    if [ $IMAGE_SIZE -lt 50 ]; then
+        qemu-img resize ${WORK_DIR}/cache/$IMAGE_NAME +50G
+    fi
 }
 
 
@@ -203,7 +207,6 @@ function set_all_ssh_config()
 
     IFS=$old_ifs
 }
-
 
 function clear_all_seed_cdrom_for_vm()
 {
