@@ -1,0 +1,9 @@
+# kmr -> kk8s multinodes repo, kmm -> kk8s multinodes master, kmn -> node
+export HOSTNAMES=${HOSTNAMES:-"kmr0,kmm0,kmn0,kmn1"}
+export VIRT_NUMBER=${VIRT_NUMBER:-"4"}
+export VIRT_MEM=${VIRT_MEM:-"8192"}
+export VIRT_CPUS=${VIRT_CPUS:-"6"}
+export IMAGE_URL=http://a2:8888/CentOS-7-x86_64-GenericCloud.qcow2
+export IPADDR_START=${IPADDR_START:-"90"}
+export KMASTER=kmm0
+
