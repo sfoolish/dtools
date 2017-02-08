@@ -1,0 +1,8 @@
+export HOSTNAMES=${HOSTNAMES:-"krepo,kmaster"}
+export VIRT_NUMBER=${VIRT_NUMBER:-"2"}
+export VIRT_MEM=${VIRT_MEM:-"40960"}
+export VIRT_CPUS=${VIRT_CPUS:-"12"}
+export IMAGE_URL=http://a2:8888/CentOS-7-x86_64-GenericCloud.qcow2
+export IPADDR_START=${IPADDR_START:-"71"}
+export KMASTER=kmaster
+

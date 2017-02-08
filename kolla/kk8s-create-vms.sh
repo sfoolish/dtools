@@ -1,9 +1,7 @@
 #!/bin/bash
 set -x
 
-pushd ../
-git apply kolla/kk8s-libvirt-env.diff
-popd
+source kk8s-libvirt-env-aio
 
 # DATE=$(date +"%y-%m-%d-%T")
 DATE=$(date +"%y-%m-%d-%H")
@@ -18,18 +16,18 @@ i=0
 while [ $i -lt 10 ]; do
   ./deploy.sh 2>&1 | ts '[%Y-%m-%d %H:%M:%S]' | tee -a ${LOG_DIR}/libvirt_deploy.log
   sleep 10
-  ssh kmaster "hostname"
+  ssh $KMASTER "hostname"
   if [ $? == 0 ]; then
     echo "Depoloy success!" >> ${LOG_DIR}/libvirt_deploy.log
     break
   fi
   
   # try restart vm
-  virsh destroy kmaster
+  virsh destroy $KMASTER
   sleep 1
-  virsh start kmaster
+  virsh start $KMASTER
   sleep 10
-  ssh kmaster "hostname"
+  ssh $KMASTER "hostname"
   if [ $? == 0 ]; then
     echo "Depoloy success after restart!" >> ${LOG_DIR}/libvirt_deploy.log
     break
@@ -39,10 +37,9 @@ done
 
 popd
 
-ssh kmaster "hostname"
+ssh $KMASTER "hostname"
 if [ $? != 0 ]; then
   echo "!!! Deploy Failed EXIT !!!" >> ${LOG_DIR}/libvirt_deploy.log
   exit 1
 fi
 
-git checkout ../libvirt_tools/env_config.sh
