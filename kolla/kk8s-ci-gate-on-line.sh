@@ -25,10 +25,10 @@ git clone https://github.com/openstack/kolla-kubernetes.git .
 
 mkdir -p $WORKSPACE/logs/
 
-sed  -ie "s/180/360/g" tools/wait_for_pods.sh
-sed  -ie "s/240/480/g" tools/setup_gate.sh
-sed  -ie "s/240/480/g" tools/setup_gate_iscsi.sh
-sed  -ie "s/240/480/g" tools/setup_rbd_volumes.sh
+sed -i -e "s/180/360/g" tools/wait_for_pods.sh
+sed -i -e "s/240/480/g" tools/setup_gate.sh
+sed -i -e "s/240/480/g" tools/setup_gate_iscsi.sh
+sed -i -e "s/240/480/g" tools/setup_rbd_volumes.sh
 
 
 cat << EOF > tests/bin/fix_gate_iptables.sh
