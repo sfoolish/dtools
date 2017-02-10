@@ -245,3 +245,17 @@ function clear_all_seed_cdrom_for_vm()
     IFS=$old_ifs
 }
 
+function wait_all_ok()
+{
+    old_ifs=$IFS
+    IFS=,
+    i=0
+    for host in $HOSTNAMES; do
+        IFS=$old_ifs
+        wait_ok "${IPADDR_PREFIX}$((IPADDR_START+i))" 100
+        let i=i+1
+        IFS=,
+    done
+
+    IFS=$old_ifs
+}

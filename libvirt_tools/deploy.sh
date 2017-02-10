@@ -24,6 +24,7 @@ launch_host_vms
 set_all_root_auth
 set_all_ssh_config
 clear_all_seed_cdrom_for_vm
+wait_all_ok
 
 set +x
 popd
