@@ -1,22 +1,23 @@
 #!/bin/bash -e
 
-ifconfig eth1 192.168.222.2/24
+ifconfig eth1 192.168.222.222/24
 mkdir -p /etc/nodepool/
-echo "192.168.222.2" > /etc/nodepool/primary_node_private
+echo "192.168.222.222" > /etc/nodepool/primary_node_private
 
 if [ -f /etc/redhat-release ]; then
     cat > /tmp/setup.$$ <<"EOF"
+set -x
 setenforce 0
-cat <<"EOEF" > /etc/yum.repos.d/kubernetes.repo
-[kubernetes]
-name=Kubernetes
-baseurl=http://yum.kubernetes.io/repos/kubernetes-el7-x86_64
+rm -rf /etc/yum.repos.d/*
+cat << "EEOF" > /etc/yum.repos.d/k8s_ppa_repo.repo
+[k8s_ppa_repo]
+name=rhel - k8s_repo
+proxy=_none_
+baseurl=http://192.168.21.21/repo_mirror/centos7-k8s-ppa
 enabled=1
-gpgcheck=1
-repo_gpgcheck=1
-gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg
-       https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
-EOEF
+gpgcheck=0
+skip_if_unavailable=1
+EEOF
 yum install -y docker kubelet kubeadm kubectl kubernetes-cni ebtables
 systemctl start kubelet
 EOF

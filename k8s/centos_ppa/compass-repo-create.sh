@@ -58,7 +58,7 @@ sed -i 's/keepcache=0/keepcache=1/g' /etc/yum.conf
 scp 192.168.21.21:/opt/kk8s/dtools_daily/k8s/centos_ppa/comps.xml /
 scp 192.168.21.21:/opt/kk8s/dtools_daily/k8s/centos_ppa/ceph_key_release.asc /
 scp 192.168.21.21:/opt/kk8s/dtools_daily/k8s/centos_ppa/repo-create.sh /
-yum install createrepo tar yum-plugin-priorities yum-utils -y
+yum install -y createrepo tar yum-plugin-priorities yum-utils
 
 
 
@@ -76,9 +76,9 @@ gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg
 EOEF
 
 ## System update
-yum update
+yum update -y
 ## install docker and k8s
-yum -y install --skip-broken --downloadonly docker kubelet kubeadm kubectl kubernetes-cni ebtables
+yum install -y --skip-broken --downloadonly docker kubelet kubeadm kubectl kubernetes-cni ebtables
 
 ## create ppa
 /repo-create.sh
