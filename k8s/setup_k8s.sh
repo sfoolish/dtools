@@ -19,6 +19,8 @@ gpgcheck=0
 skip_if_unavailable=1
 EEOF
 yum install -y docker kubelet kubeadm kubectl kubernetes-cni ebtables
+echo 'INSECURE_REGISTRY="--insecure-registry 192.168.122.102:4000"' > /etc/sysconfig/docker
+export KUBE_REPO_PREFIX="192.168.122.102:4000/gcr.io/google_containers"
 systemctl start kubelet
 EOF
 else

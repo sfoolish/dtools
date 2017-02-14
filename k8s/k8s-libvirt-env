@@ -1,4 +1,4 @@
-export HOSTNAMES=${HOSTNAMES:-"km0"}
+export HOSTNAMES=${HOSTNAMES:-"km0,kr0"}
 export VIRT_NUMBER=${VIRT_NUMBER:-"2"}
 export VIRT_MEM=${VIRT_MEM:-"40960"}
 export VIRT_CPUS=${VIRT_CPUS:-"12"}
