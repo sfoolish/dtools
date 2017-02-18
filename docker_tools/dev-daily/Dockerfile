@@ -5,18 +5,20 @@
 # http://www.apache.org/licenses/LICENSE-2.0
 ##############################################################################
 
-FROM ubuntu:14.04
+FROM ubuntu:xenial
 MAINTAINER Qi Liang <sfoolish.liang@gmail.com>
 
 LABEL image=sfoolish/dev-daily
 
 ENV HOME_DIR /home/sfoolish
 
+COPY sources.list /etc/apt/sources.list
 RUN apt-get update && apt-get install -y \
     curl \
     dos2unix \
     git \
     git-review \
+    golang \
     ipython \
     python \
     sshpass \
