@@ -1,0 +1,33 @@
+---
+
+- name: group vars all example
+  debug:
+    msg: "{{ group_vars_example }}"
+
+- name: copy module example
+  copy:
+    src: test.txt
+    dest: /tmp/test.txt
+    mode: "u=rw,g=r,o=r"
+
+- name: template module example
+  template:
+    src: test.j2
+    dest: /tmp/template_gen.txt
+
+- name: fetch template generated file content
+  shell: cat /tmp/template_gen.txt
+  register: template_gen_out
+
+- name: dump template generated file content
+  debug:
+    msg: "{{ template_gen_out.stdout }}"
+
+- name: rm test files
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - /tmp/test.txt
+    - /tmp/template_gen.txt
+
