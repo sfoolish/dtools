@@ -1,7 +1,7 @@
 #!/bin/bash
 set -x
 
-source k8s-libvirt-env
+source libvirt-env
 
 # DATE=$(date +"%y-%m-%d-%T")
 DATE=$(date +"%y-%m-%d-%H")
