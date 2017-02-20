@@ -12,8 +12,14 @@ LABEL image=sfoolish/dev-daily
 
 ENV HOME_DIR /home/sfoolish
 
-COPY sources.list /etc/apt/sources.list
-RUN apt-get update && apt-get install -y \
+RUN echo 'deb [ arch=amd64 ] http://192.168.137.222/ubuntu/  xenial main restricted universe multiverse \n\
+deb [ arch=amd64 ] http://192.168.137.222/ubuntu/ xenial-security main restricted universe multiverse \n\
+deb [ arch=amd64 ] http://192.168.137.222/ubuntu/ xenial-updates main restricted universe multiverse \n\
+ \n\
+deb-src [ arch=amd64 ] http://192.168.137.222/ubuntu/ xenial main restricted universe multiverse \n\
+deb-src [ arch=amd64 ] http://192.168.137.222/ubuntu/ xenial-security main restricted universe multiverse \n\
+deb-src [ arch=amd64 ] http://192.168.137.222/ubuntu/ xenial-updates main restricted universe multiverse\n' \
+    > /etc/apt/sources.list && apt-get update && apt-get install -y \
     curl \
     dos2unix \
     git \
