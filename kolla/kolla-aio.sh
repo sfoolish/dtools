@@ -1,6 +1,25 @@
 #!/bin/bash
 
 # http://docs.openstack.org/developer/kolla/newton/quickstart.html
+# Docker 1.3 bug
+# https://bugs.launchpad.net/kolla/+bug/1657946
+# https://review.openstack.org/#/c/423122/1/ansible/library/kolla_docker.py
+# /usr/share/kolla/ansible/library/kolla_docker.py
+#         if self.params.get('restart_policy') in ['on-failure',
+#                                                  'always',
+#                                                  'unless-stopped']:
+# -            options['restart_policy'] = {
+# -                'Name': self.params.get('restart_policy'),
+# -                'MaximumRetryCount': self.params.get('restart_retries')
+# -            }
+# +            policy = {'Name': self.params.get('restart_policy')}
+# +            # NOTE(Jeffrey4l): MaximumRetryCount is only needed for on-failure
+# +            # policy
+# +            if self.params.get('restart_policy') == 'on-failure':
+# +                retries = self.params.get('restart_retries')
+# +                policy['MaximumRetryCount'] = retries
+# +            options['restart_policy'] = policy
+
 
 set -x
 
