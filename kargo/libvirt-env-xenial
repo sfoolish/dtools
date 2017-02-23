@@ -1,0 +1,9 @@
+export HOSTNAMES="kargo0,kargo1,kargo2,kargo3,kargo4"
+export VIRT_NUMBER="5"
+export VIRT_MEM="8192"
+export VIRT_CPUS="6"
+export IMAGE_URL=http://a2:8888/xenial-server-cloudimg-amd64-disk1.img
+export IPADDR_START="121"
+export KMASTER=kargo0
+export USER_NAME=ubuntu
+export NIC_NAME=ens3

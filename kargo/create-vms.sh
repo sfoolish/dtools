@@ -1,7 +1,8 @@
 #!/bin/bash
 set -x
 
-source libvirt-env
+source libvirt-env-centos7
+#source libvirt-env-xenial
 
 # DATE=$(date +"%y-%m-%d-%T")
 DATE=$(date +"%y-%m-%d-%H")

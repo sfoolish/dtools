@@ -90,6 +90,7 @@ function launch_host_vms() {
         sed -e "s/REPLACE_IPADDR/${IPADDR_PREFIX}$((IPADDR_START+i))/g" \
             -e "s/REPLACE_GATEWAY/${IPADDR_PREFIX}1/g" \
             -e "s/REPLACE_HOSTNAME/${host}/g" \
+            -e "s/REPLACE_NIC_NAME/${NIC_NAME}/g" \
             meta-data_template \
             > meta-data
 
@@ -135,7 +136,7 @@ function wait_ok() {
     retry=0
     while true
     do
-        ssh $ssh_args centos@$MGMT_IP "exit" >/dev/null 2>&1
+        ssh $ssh_args ${USER_NAME}@$MGMT_IP "exit" >/dev/null 2>&1
         [ $? -eq 0 ] && break
 
         echo "os install time used: $((retry*100/$2))%"
@@ -143,9 +144,9 @@ function wait_ok() {
         let retry+=1
         if [[ $retry -ge $2 ]];then
             # first try
-            ssh $ssh_args centos@$MGMT_IP "exit"
+            ssh $ssh_args ${USER_NAME}@$MGMT_IP "exit"
             # second try
-            ssh $ssh_args centos@$MGMT_IP "exit"
+            ssh $ssh_args ${USER_NAME}@$MGMT_IP "exit"
             exit_status=$?
             if [[ $exit_status == 0 ]]; then
                 echo "final ssh login compass success !!!"
@@ -163,7 +164,7 @@ function wait_ok() {
 function root_auth_setup()
 {
     MGMT_IP=$1
-    ssh -tt $ssh_args centos@$MGMT_IP "
+    ssh -tt $ssh_args ${USER_NAME}@$MGMT_IP "
         sudo sed -i -e 's/ssh-rsa/\n&/g' /root/.ssh/authorized_keys
         sudo sed -i -e '/echo/d' /root/.ssh/authorized_keys
     "
