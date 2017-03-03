@@ -13,6 +13,21 @@ cd kargo
 ./create-vms.sh
 ```
 
+## code version tested
+
+```bash
+kargo# git diff
+kargo# git log
+commit 09aa3e0e7959c97f198a6f19fa6ebc05dc333d58
+Merge: ad58e08 a673e97
+Author: Antoine Legrand <antoine.legrand@coreos.com>
+Date:   Mon Feb 20 08:44:16 2017 +0100
+
+    Merge pull request #1052 from hvnsweeting/master
+
+    Put Ansible requirements first
+```
+
 ## Centos ansible setup
 
 ```bash
@@ -103,12 +118,15 @@ kargo3    Ready                      10m
 
 ### Kargo deploy issues
 
+#### inventory file generate failure
+
 cp -r inventory my_inventory
 declare -a IPS=(192.168.122.121 192.168.122.122 192.168.122.123 192.168.122.124 192.168.122.125)
 CONFIG_FILE=my_inventory/inventory.cfg python3 contrib/inventory_builder/inventory.py ${IPS}
 
 CONFIG_FILE=inventory_test/inventory.cfg python3 contrib/inventory_builder/inventory.py ${IPS}
 
+```yaml
 [all]
 node1 	 ansible_host=192.168.122.121 ip=192.168.122.121
 
@@ -126,8 +144,7 @@ kube-node
 kube-master
 
 [calico-rr]
-
----
+```
 
 ### Kargo deploy Fixed issues
 
@@ -252,4 +269,3 @@ TASK [test : Write kubelet config file] ****************************************
 changed: [ansilbe0]
 changed: [ansilbe1]
 ```
-
