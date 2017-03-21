@@ -1,0 +1,17 @@
+ip_settings: {'host1': {'mgmt': {'name': 'mgmt', 'ip': '192.168.122.151', 'alias': 'mgmt', 'netmask': 24, 'role': ['controller', 'compute'], 'cidr': '172.16.1.0/24'}}, 'host2': {'mgmt': {'name': 'mgmt', 'ip': '192.168.122.152', 'alias': 'mgmt', 'netmask': 24, 'role': ['controller', 'compute'], 'cidr': '172.16.1.0/24'}}, 'host3': {'mgmt': {'name': 'mgmt', 'ip': '192.168.122.153', 'alias': 'mgmt', 'netmask': 24, 'role': ['controller', 'compute'], 'cidr': '172.16.1.0/24'}},}
+
+internal_ip: "{{ ip_settings[inventory_hostname]['mgmt']['ip'] }}"
+
+haproxy_hosts:
+  host1: 192.168.122.151
+  host2: 192.168.122.152
+  host3: 192.168.122.153
+
+host_index:
+  host1: 0
+  host2: 1
+  host3: 2
+
+WSREP_SST_USER: wsrep_sst
+WSREP_SST_PASS: wsrep_sst_sercet
+

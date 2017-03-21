@@ -1,0 +1,4 @@
+[all]
+host1 ansible_ssh_host=192.168.122.151 ansible_ssh_user=root
+host2 ansible_ssh_host=192.168.122.152 ansible_ssh_user=root
+host3 ansible_ssh_host=192.168.122.153 ansible_ssh_user=root
