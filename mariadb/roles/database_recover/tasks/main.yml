@@ -1,0 +1,28 @@
+---
+
+- name: copy scripts
+  copy: src={{ item }} dest=/opt
+  with_items:
+    - log.py
+    - galera_bootstrap.py
+  when:
+    - inventory_hostname == haproxy_hosts.keys()[0]
+
+- name: copy boot scripts
+  copy: src={{ item }} dest=/etc/init.d/ mode=0755
+  with_items:
+    - galera_init
+  when:
+    - inventory_hostname == haproxy_hosts.keys()[0]
+
+
+- name: add to boot scripts
+  shell: update-rc.d galera_init defaults
+  when: ansible_os_family == "Debian" and inventory_hostname == haproxy_hosts.keys()[0]
+
+- name: add to boot scripts
+  shell: |
+    chkconfig --add galera_init;
+    chkconfig --level 2345 net_init on;
+  when: ansible_os_family == 'RedHat'
+

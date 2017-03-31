@@ -1,0 +1,6 @@
+---
+- hosts: all
+  remote_user: root
+  max_fail_percentage: 0
+  roles:
+    - database_recover
