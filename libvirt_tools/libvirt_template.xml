@@ -3,6 +3,7 @@
   <memory unit='MiB'>REPLACE_MEM</memory>
   <currentMemory unit='MiB'>REPLACE_MEM</currentMemory>
   <vcpu placement='static'>REPLACE_CPU</vcpu>
+  <cpu mode='host-passthrough'/>
   <os>
     <type arch='x86_64'>hvm</type>
     <boot dev='hd'/>
