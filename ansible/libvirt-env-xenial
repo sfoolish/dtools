@@ -1,0 +1,9 @@
+export HOSTNAMES=${HOSTNAMES:-"ansible0,ansible1"}
+export VIRT_NUMBER=${VIRT_NUMBER:-"2"}
+export VIRT_MEM=${VIRT_MEM:-"4096"}
+export VIRT_CPUS=${VIRT_CPUS:-"4"}
+export IMAGE_URL=http://a2:8888/xenial-server-cloudimg-amd64-disk1.img
+export IPADDR_START=${IPADDR_START:-"111"}
+export KMASTER=ansible0
+export USER_NAME=ubuntu
+export NIC_NAME=ens3
