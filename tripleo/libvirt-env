@@ -1,0 +1,11 @@
+export HOSTNAMES=${HOSTNAMES:-"rh0"}
+export CLEAN_HOSTS=${CLEAN_HOSTS:-"overcloud-node1,overcloud-node2,overcloud-node3"}
+export CLEAN_VIRT_NUMBER=${VIRT_NUMBER:-"3"}
+export VIRT_NUMBER=${VIRT_NUMBER:-"1"}
+export VIRT_MEM=${VIRT_MEM:-"8192"}
+export VIRT_CPUS=${VIRT_CPUS:-"4"}
+export IMAGE_URL=http://a2:8888/undercloud.qcow2
+export IPADDR_START=${IPADDR_START:-"200"}
+export KMASTER=rh0
+export USER_NAME=cloud-user
+
