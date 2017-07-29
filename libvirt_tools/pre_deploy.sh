@@ -9,3 +9,8 @@ apt-get install -y \
     moreutils \
     wget
 
+# generate ssh key if it is not exist
+if [ ! -f ~/.ssh/id_rsa.pub ]; then
+    ssh-keygen -f ~/.ssh/id_rsa -t rsa -N ''
+fi
+
