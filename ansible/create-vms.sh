@@ -3,6 +3,7 @@ set -x
 
 #source libvirt-env
 source libvirt-env-xenial
+ssh_args="-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i /root/.ssh/id_rsa"
 
 # DATE=$(date +"%y-%m-%d-%T")
 DATE=$(date +"%y-%m-%d-%H")
@@ -15,7 +16,7 @@ pushd ../libvirt_tools
 ./deploy.sh 2>&1 | ts '[%Y-%m-%d %H:%M:%S]' | tee -a ${LOG_DIR}/libvirt_deploy.log
 popd
 
-ssh $KMASTER "hostname"
+ssh $ssh_args $KMASTER "hostname"
 if [ $? != 0 ]; then
   echo "!!! Deploy Failed EXIT !!!" >> ${LOG_DIR}/libvirt_deploy.log
   exit 1
@@ -28,8 +29,8 @@ fi
 old_ifs=$IFS
 IFS=,
 for node in $HOSTNAMES; do
-    ssh $node "apt-get install -y python2.7"
-    ssh $node "ln -s /usr/bin/python2.7 /usr/bin/python"
+    ssh $ssh_args $node "apt-get install -y python2.7"
+    ssh $ssh_args $node "ln -s /usr/bin/python2.7 /usr/bin/python"
 done
 IFS=$old_ifs
 
