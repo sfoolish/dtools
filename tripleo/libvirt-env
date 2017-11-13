@@ -1,6 +1,6 @@
 export HOSTNAMES=${HOSTNAMES:-"rh0"}
-export CLEAN_HOSTS=${CLEAN_HOSTS:-"overcloud-node1,overcloud-node2,overcloud-node3"}
-export CLEAN_VIRT_NUMBER=${VIRT_NUMBER:-"3"}
+export CLEAN_HOSTS=${CLEAN_HOSTS:-"overcloud-node1,overcloud-node2,overcloud-node3,overcloud-node4,overcloud-node5,overcloud-node6,overcloud-node7"}
+export CLEAN_VIRT_NUMBER=${VIRT_NUMBER:-"7"}
 export VIRT_NUMBER=${VIRT_NUMBER:-"1"}
 export VIRT_MEM=${VIRT_MEM:-"8192"}
 export VIRT_CPUS=${VIRT_CPUS:-"4"}
