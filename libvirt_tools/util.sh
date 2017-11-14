@@ -152,8 +152,8 @@ function launch_clean_host_vms() {
         mkdir -p $vm_dir
 
         qemu-img create -f qcow2 -o preallocation=metadata $vm_dir/disk.img 500G
-        qemu-img create -f qcow2 -o preallocation=metadata $vm_dir/disk-b.img 100G
-        qemu-img create -f qcow2 -o preallocation=metadata $vm_dir/disk-c.img 100G
+        qemu-img create -f qcow2 -o preallocation=metadata $vm_dir/disk-b.img 500G
+        qemu-img create -f qcow2 -o preallocation=metadata $vm_dir/disk-c.img 500G
         # create vm xml
         sed -e "s/REPLACE_MEM/$VIRT_MEM/g" \
             -e "s/REPLACE_CPU/$VIRT_CPUS/g" \
