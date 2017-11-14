@@ -152,11 +152,15 @@ function launch_clean_host_vms() {
         mkdir -p $vm_dir
 
         qemu-img create -f qcow2 -o preallocation=metadata $vm_dir/disk.img 500G
+        qemu-img create -f qcow2 -o preallocation=metadata $vm_dir/disk-b.img 100G
+        qemu-img create -f qcow2 -o preallocation=metadata $vm_dir/disk-c.img 100G
         # create vm xml
         sed -e "s/REPLACE_MEM/$VIRT_MEM/g" \
             -e "s/REPLACE_CPU/$VIRT_CPUS/g" \
             -e "s/REPLACE_NAME/$host/g" \
             -e "s#REPLACE_IMAGE_A#$vm_dir/disk.img#g" \
+            -e "s#REPLACE_IMAGE_B#$vm_dir/disk-b.img#g" \
+            -e "s#REPLACE_IMAGE_C#$vm_dir/disk-c.img#g" \
             -e "s/REPLACE_NET_MGMT_NET/mgmt-net/g" \
             libvirt_clean_template.xml \
             > $vm_dir/libvirt.xml
