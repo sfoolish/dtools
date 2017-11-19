@@ -12,7 +12,7 @@ mkdir -p ${LOG_DIR}
 
 # deploy vms
 pushd ../libvirt_tools
-./deploy.sh 2>&1 | ts '[%Y-%m-%d %H:%M:%S]' | tee -a ${LOG_DIR}/libvirt_deploy.log
+./deploy.sh 2>&1
 popd
 
 ssh $ssh_args $KMASTER "hostname"
