@@ -21,6 +21,16 @@
       <source file='REPLACE_IMAGE_A'/>
       <target dev='vda' bus='virtio'/>
     </disk>
+    <disk type='file' device='disk'>
+      <driver name='qemu' type='qcow2'/>
+      <source file='REPLACE_IMAGE_B'/>
+      <target dev='vdb' bus='virtio'/>
+    </disk>
+     <disk type='file' device='disk'>
+      <driver name='qemu' type='qcow2'/>
+      <source file='REPLACE_IMAGE_C'/>
+      <target dev='vdc' bus='virtio'/>
+    </disk>
     <interface type='network'>
       <source network='REPLACE_NET_MGMT_NET'/>
       <model type='virtio'/>
