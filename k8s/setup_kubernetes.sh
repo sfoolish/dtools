@@ -62,7 +62,7 @@ if [ "$1" == "master" ]; then
     mkdir -p ~/.kube
     sudo cp /etc/kubernetes/admin.conf ~/.kube/config
     sudo chown $(id -u):$(id -g) ~/.kube/config
-    tools/wait_for_kube_control_plane.sh
+    ./wait_for_kube_control_plane.sh
 
 # NOTE(sbezverk/kfox111) This is a horible hack to get k8s 1.6+ working. This should be
 # removed in favor of more fine grained rules.
