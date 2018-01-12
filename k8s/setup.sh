@@ -97,7 +97,7 @@ if [ "x$CONFIG" == "xceph-multi" ]; then
         ssh -n $line sudo setenforce 0
         ssh -n $line sudo yum remove -y iscsi-initiator-utils
         ssh -n $line sudo mv kubectl /usr/bin/
-        ssh -n $line bash setup_kubernetes.sh slave "$(cat /etc/kubernetes/token.txt)" "$(cat /etc/kubernetes/ip.txt)"
+        ssh -n $line bash setup_kubernetes.sh slave "$(cat /etc/kubernetes/token.txt)" "$(cat /etc/kubernetes/ip.txt)" "$(cat /etc/kubernetes/cahash.txt)"
         set +xe
         count=0
         while true; do
