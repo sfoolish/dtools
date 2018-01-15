@@ -15,7 +15,7 @@ done
 ssh $MASTER ~/clearwater_setup/master_setup.sh
 
 for i in $WORKER; do
-    ssh $MASTER ~/clearwater_setup/worker_setup.sh
+    ssh $i ~/clearwater_setup/worker_setup.sh
 done
 
 ssh $MASTER ~/clearwater_setup/clearwater_setup.sh
