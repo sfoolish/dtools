@@ -23,7 +23,11 @@ cd /vagrant
 curl -L https://git.io/getLatestIstio | sh -
 mv istio-0.4.0 istio-source
 cd /vagrant/istio-source/
-export PATH=$PWD/bin:$PATH
+
+echo 'export PATH="$PATH:/vagrant/istio-source/bin"' >> ~/.bashrc
+echo "source <(kubectl completion bash)" >> ~/.bashrc
+source ~/.bashrc
+
 kubectl apply -f install/kubernetes/istio.yaml
 
 # Validate the installation
