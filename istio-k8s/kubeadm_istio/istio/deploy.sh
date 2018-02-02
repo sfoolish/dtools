@@ -17,11 +17,18 @@
 
 set -ex
 
-# Deploy istio 0.4.0
+# Ref https://git.io/getLatestIstio
+if [ "x${ISTIO_VERSION}" = "x" ] ; then
+  ISTIO_VERSION=$(curl -L -s https://api.github.com/repos/istio/istio/releases/latest | \
+                  grep tag_name | sed "s/ *\"tag_name\": *\"\(.*\)\",*/\1/")
+fi
+
+ISTIO_DIR_NAME="istio-$ISTIO_VERSION"
+
 mkdir -p /vagrant
 cd /vagrant
 curl -L https://git.io/getLatestIstio | sh -
-mv istio-0.4.0 istio-source
+mv  $ISTIO_DIR_NAME istio-source
 cd /vagrant/istio-source/
 
 echo 'export PATH="$PATH:/vagrant/istio-source/bin"' >> ~/.bashrc
