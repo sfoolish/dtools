@@ -38,10 +38,9 @@ rm ellis-svc.yaml.new
 
 # Bono configuration
 # Have a static external IP address available that the load balancer can use
-sed -ie '6s/$/\n  type: LoadBalancer/' bono-svc.yaml
-sed -ie "6s/$/\n  loadBalancerIP: $static_ip/" bono-svc.yaml
-sed -ie '6d' bono-svc.yaml
-sed -ie "32s/$/\n        - name: PUBLIC_IP\n          value: $static_ip/" bono-depl.yaml
+cp /vagrant/custom-bono-svc/bono-svc.yaml .
+sed -ie "6s/$/\n  - $static_ip/" bono-svc.yaml
+sed -ie "7s/$/\n  loadBalancerIP: $static_ip/" bono-svc.yaml
 
 cd
 kubectl apply -f clearwater-docker/kubernetes
@@ -54,8 +53,7 @@ sleep 60
 r="1"
 while [ $r != "0" ]
 do
-    o=$(kubectl get pods)
-    echo $o
+    kubectl get pods
     r=$( kubectl get pods | grep Pending | wc -l)
     sleep 60
 done
@@ -63,8 +61,7 @@ done
 q="1"
 while [ $q != "0" ]
 do
-    o=$(kubectl get pods)
-    echo $o
+    kubectl get pods
     q=$( kubectl get pods | grep ContainerCreating | wc -l)
     sleep 60
 done

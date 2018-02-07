@@ -22,4 +22,5 @@ if [ $? != 0 ]; then
   exit 1
 fi
 
+./deploy-clearwater.sh
 
