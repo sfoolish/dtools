@@ -1,9 +1,9 @@
-export HOSTNAMES=${HOSTNAMES:-"vm0,vm1,vm2"}
+export HOSTNAMES=${HOSTNAMES:-"istio0,istio1,istio2"}
 export VIRT_NUMBER=${VIRT_NUMBER:-"4"}
 export VIRT_MEM=${VIRT_MEM:-"8192"}
 export VIRT_CPUS=${VIRT_CPUS:-"4"}
 export IMAGE_URL=http://a2:8888/xenial-server-cloudimg-amd64-disk1.img
-export IPADDR_START=${IPADDR_START:-"191"}
-export KMASTER=vm0
+export IPADDR_START=${IPADDR_START:-"195"}
+export KMASTER=istio0
 export USER_NAME=ubuntu
 export NIC_NAME=ens3
