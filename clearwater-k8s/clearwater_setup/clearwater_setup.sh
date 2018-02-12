@@ -38,7 +38,8 @@ rm ellis-svc.yaml.new
 
 # Bono configuration
 # Have a static external IP address available that the load balancer can use
-cp /vagrant/custom-bono-svc/bono-svc.yaml .
+#cp /vagrant/custom-bono-svc/bono-svc.yaml .
+cp ~/clearwater_setup/custom-bono-svc/bono-svc.yaml .
 sed -ie "6s/$/\n  - $static_ip/" bono-svc.yaml
 sed -ie "7s/$/\n  loadBalancerIP: $static_ip/" bono-svc.yaml
 
