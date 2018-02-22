@@ -1,7 +1,7 @@
 #!/bin/bash
 
-MASTER="vm0"
-WORKER="vm1 vm2"
+MASTER="clearwater0"
+WORKER="clearwater1 clearwater2"
 ALL="$MASTER $WORKER"
 
 for i in $ALL; do

@@ -1,8 +1,0 @@
-export HOSTNAMES=${HOSTNAMES:-"vm0,vm1"}
-export VIRT_NUMBER=${VIRT_NUMBER:-"2"}
-export VIRT_MEM=${VIRT_MEM:-"4096"}
-export VIRT_CPUS=${VIRT_CPUS:-"4"}
-export IMAGE_URL=http://a2:8888/CentOS-7-x86_64-GenericCloud.qcow2
-export IPADDR_START=${IPADDR_START:-"191"}
-export KMASTER=vm0
-
