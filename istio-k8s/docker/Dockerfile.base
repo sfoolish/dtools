@@ -1,0 +1,33 @@
+FROM ubuntu:16.04
+
+RUN apt-get update \
+    && apt-get install -y curl wget git vim python \
+       cmake make libtool m4 autoconf uuid-dev \
+    && apt-get -y autoremove \
+    && apt-get clean
+
+RUN wget 192.168.21.2:8888/go1.9.4.linux-amd64.tar.gz; \
+    tar xf go1.9.4.linux-amd64.tar.gz -C /usr/local/; \
+    rm go1.9.4.linux-amd64.tar.gz; \
+    export PATH=$PATH:/usr/local/go/bin/; \
+    export GOPATH=/workspace/go; \
+    export PATH=$PATH:$GOPATH/bin; \
+    export ISTIO=$GOPATH/src/istio.io; \
+    echo 'export PATH=$PATH:/usr/local/go/bin/' >> ~/.bashrc; \
+    echo 'export GOPATH=/workspace/go' >> ~/.bashrc; \
+    echo 'export PATH=$PATH:$GOPATH/bin' >> ~/.bashrc; \
+    echo 'export ISTIO=$GOPATH/src/istio.io' >> ~/.bashrc; \
+    go get -u github.com/derekparker/delve/cmd/dlv; \
+    mkdir -p $ISTIO; \
+    wget 192.168.21.2:8888/istio.tar.gz; \
+    tar xf istio.tar.gz -C $ISTIO; \
+    rm istio.tar.gz;
+
+RUN export PATH=$PATH:/usr/local/go/bin/; \
+    export GOPATH=/workspace/go; \
+    export PATH=$PATH:$GOPATH/bin; \
+    export ISTIO=$GOPATH/src/istio.io; \
+    cd $ISTIO/istio; \
+    git pull; \
+    GOBUILDFLAGS=-i make DEBUG=1 build
+

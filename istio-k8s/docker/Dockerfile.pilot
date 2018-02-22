@@ -1,0 +1,4 @@
+FROM istio-base
+
+ENTRYPOINT ["/workspace/go/out/linux_amd64/debug/pilot-discovery"]
+
