@@ -7,6 +7,7 @@ apt-get install -y \
     libvirt-bin \
     qemu-kvm \
     moreutils \
+    gawk \
     wget
 
 # generate ssh key if it is not exist
