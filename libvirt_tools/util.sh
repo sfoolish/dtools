@@ -42,6 +42,27 @@ function setup_nat_net() {
 
     sudo virsh net-define $net_name.xml
     sudo virsh net-start $net_name
+    sudo virsh net-autostart $net_name
+}
+
+function setup_bridge_net()
+{
+    net_name=$1
+    nic=$2
+
+    sudo ifconfig $nic up
+
+    sudo virsh net-destroy $net_name
+    sudo virsh net-undefine $net_name
+
+    sed -e "s/REPLACE_NAME/$net_name/g" \
+        -e "s/REPLACE_NIC/$nic/g" \
+        bridge_template.xml \
+        > $net_name.xml
+
+    sudo virsh net-define $net_name.xml
+    sudo virsh net-start $net_name
+    sudo virsh net-autostart $net_name
 }
 
 
@@ -125,6 +146,7 @@ function launch_host_vms() {
             -e "s#REPLACE_SEED_IMAGE#$vm_dir/seed.iso#g" \
             -e "s/REPLACE_MAC_ADDR/${mac_array[$i]}/g" \
             -e "s/REPLACE_NET_MGMT_NET/mgmt-net/g" \
+            -e "s/REPLACE_NET_INSTALL/install/g" \
             libvirt_template.xml \
             > $vm_dir/libvirt.xml
 
@@ -162,6 +184,7 @@ function launch_clean_host_vms() {
             -e "s#REPLACE_IMAGE_B#$vm_dir/disk-b.img#g" \
             -e "s#REPLACE_IMAGE_C#$vm_dir/disk-c.img#g" \
             -e "s/REPLACE_NET_MGMT_NET/mgmt-net/g" \
+            -e "s/REPLACE_NET_INSTALL/install/g" \
             libvirt_clean_template.xml \
             > $vm_dir/libvirt.xml
 

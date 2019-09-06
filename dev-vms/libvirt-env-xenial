@@ -7,3 +7,4 @@ export IPADDR_START=${IPADDR_START:-"198"}
 export KMASTER=dev-vm0
 export USER_NAME=ubuntu
 export NIC_NAME=ens3
+export INSTALL_NIC=eth1

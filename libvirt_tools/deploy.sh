@@ -20,6 +20,7 @@ host_vm_dir=$WORK_DIR/vm
 
 download_iso
 setup_nat_net mgmt-net $MGMT_NET_GW $MGMT_NET_MASK $MGMT_NET_IP_START $MGMT_NET_IP_END
+setup_bridge_net install $INSTALL_NIC
 launch_host_vms
 launch_clean_host_vms
 set_all_root_auth
